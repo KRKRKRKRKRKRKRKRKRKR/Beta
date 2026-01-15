@@ -4,6 +4,7 @@
 #include "Stage.h"
 #include "Player.h"
 #include "Easing.h"
+#include "Collider.h"
 
 class GamePlay {
 public:
@@ -17,6 +18,7 @@ private:
 
 	Stage stage_;									//ステージ
 	Player player_;									//プレイヤー
+	Collider collider_;								//当たり判定
 	Easing cameraRotateEasing_;						//カメラ回転イージング
 	float currentCameraRotation_ = 0.0f;			//現在のカメラ回転角度
 	void CameraControl(char* keys, char* preKeys);	//カメラ操作

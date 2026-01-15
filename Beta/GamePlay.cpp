@@ -15,30 +15,29 @@ void GamePlay::Initialize() {
 
 void GamePlay::Update(char* keys, char* preKeys) {
 
-	CameraControl(keys,preKeys);
+	CameraControl(keys, preKeys);
 	cameraRotateEasing_.Update();
 	Camera2D::GetInstance()->MoveCameraTransform();
 	player_.Update(keys, preKeys);
+	player_.SetHitStage(collider_.Clamp(player_.transform, stage_.GetTransform()));
+	
 }
 
 void GamePlay::Draw() {
 	stage_.Draw();
-	Transform2D testBox;
-
-	testBox.Init({ 640.0f,500.0f }, 50.0f, 50.0f);
-
-	Quad screen = Camera2D::GetInstance()->WorldToScreen(testBox);
-
-	Novice::DrawQuad(static_cast<int>(screen.v[0].x), static_cast<int>(screen.v[0].y), static_cast<int>(screen.v[1].x), static_cast<int>(screen.v[1].y), static_cast<int>(screen.v[2].x), static_cast<int>(screen.v[2].y), static_cast<int>(screen.v[3].x), static_cast<int>(screen.v[3].y), 0, 0, static_cast<int>(testBox.width), static_cast<int>(testBox.height), Novice::LoadTexture("./BOX.png"), BLACK);
+	player_.Draw();
 
 	Novice::ScreenPrintf(0, 50, "Camera Rotation: %.2f", Camera2D::GetInstance()->GetCameraInfo().rotation);
-	Novice::ScreenPrintf(0, 70, "Camera State: %s", (stageState_ == TOP ? "TOP is UP" : "BOTTOM is UP"));
+	Novice::ScreenPrintf(0, 70, "Camera State: %s", (GameConfig::GetInstance()->GetStageState() == GameConfig::TOP ? "TOP is UP" : "BOTTOM is UP"));
+	Novice::ScreenPrintf(0, 90, "Camera isMove: %s", (GameConfig::GetInstance()->GetIsRotate() == true ? "Move" : "Stop"));
 }
+void GamePlay::CameraControl(char* keys, char* preKeys) {
 
-// ƒJƒƒ‰‘€ì
-void GamePlay::CameraControl(char * keys,char * preKeys) {
+	GameConfig* config = GameConfig::GetInstance();
 
 	if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] && !cameraRotateEasing_.isMove) {
+		config->SetIsRotate(true);
+
 		if (currentCameraRotation_ >= 360.0f) {
 			currentCameraRotation_ = 0.0f;
 		}
@@ -46,13 +45,15 @@ void GamePlay::CameraControl(char * keys,char * preKeys) {
 		float start = currentCameraRotation_;
 		float end = 0.0f;
 
-		switch (stageState_) {
-		case TOP:
-			stageState_ = BOTTOM;
+		switch (config->GetStageState()) {
+
+		case GameConfig::TOP:
+			config->SetStageState( GameConfig::BOTTOM);
 			end = 180.0f;
 			break;
-		case BOTTOM:
-			stageState_ = TOP;
+
+		case GameConfig::BOTTOM:
+			config->SetStageState (GameConfig::TOP);
 			end = 360.0f;
 			break;
 		}
@@ -60,6 +61,11 @@ void GamePlay::CameraControl(char * keys,char * preKeys) {
 		cameraRotateEasing_.Reset();
 		cameraRotateEasing_.Init(start, end, 60, EasingType::EASING_EASE_IN_OUT_QUAD);
 		cameraRotateEasing_.Start();
+	}
+
+
+	if (!cameraRotateEasing_.isMove) {
+		config->SetIsRotate(false);
 	}
 
 	Camera2D::GetInstance()->SetCameraRotation(cameraRotateEasing_.easingRate);

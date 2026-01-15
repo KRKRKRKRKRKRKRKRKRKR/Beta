@@ -7,15 +7,11 @@ class Stage {
 public:
 	Stage();
 	void Draw();
-
+	Transform2D& GetTransform() { return transform_; }
 private:
-	//ステージのデータ
-	struct StageData {
-		Transform2D transform_;		//ステージの情報
-	};
-
+	
 	float stageWidth_ = 500.0f;
 	float stageHeight_ = 500.0f;
-	StageData stageData_;
+	Transform2D transform_;
 	int stageTextureHandle_ = Novice::LoadTexture("./BOX.png");
 };

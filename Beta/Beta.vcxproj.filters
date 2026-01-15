@@ -50,6 +50,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>GamePlay\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>GamePlay\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -153,6 +156,9 @@
     </ClInclude>
     <ClInclude Include="GameConfig.h">
       <Filter>GamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>GamePlay\Collider</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

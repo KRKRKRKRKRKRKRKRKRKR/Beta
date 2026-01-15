@@ -1,24 +1,35 @@
 ﻿#pragma once
 #include "Object2D.h"
 #include "Camera2D.h"
-#include "Config.h"
+#include "GameConfig.h"
 #include <Novice.h>
 
 class Player {
 public:
 	void Init();
-	void Update(char * keys,char * preKeys,const StageState_ &stageState);
+	void Update(char* keys, char* preKeys);
 	void Draw();
+	void SetHitStage(const bool& hit) { isHitStage = hit; }
 
-private:
 	Transform2D transform;										//データ
-	bool onGround;												//地面についたか
+private:
+	enum Direction {
+		LEFT,
+		RIGHT,
+		TOP,
+		BOTTOM
+	};
+
 	bool canChangeDirection;									//方向を変えることができるか
 	int directionLeft;											//方向変更残り回数
 	int hp;														//体力
-	int playerTextureHandle = Novice::LoadTexture("./BOX.png");//テクスチャハンドル
-	
-	//移動処理
-	void Move(char * keys,char * preKeys,const StageState_ &stageState);
+	Vector2 velocity = {};										//速度
+	Direction direction;										//向いている方向
+	float walkSpeed = 5.0f;										//歩く速さ
+	float gravity = 0.98f;										//重力
+	bool isHitStage = false;									//ステージに当たったか
+	int playerTextureHandle = Novice::LoadTexture("./BOX.png");	//テクスチャハンドル
+
+	void Move(char* keys, char* preKeys);
 
 };

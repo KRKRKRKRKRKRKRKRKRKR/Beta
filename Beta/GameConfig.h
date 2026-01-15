@@ -6,16 +6,23 @@ public:
 		static GameConfig instance;
 		return &instance;
 	}
+
 	enum StageState_ {
 		TOP,
 		BOTTOM
 	};
 
-	// --- ゲーム設定 ---
-	StageState_ stageState = TOP;	// 現在のステージ状態
-	bool isRotate = false;			// カメラ回転中かどうか
+	StageState_ GetStageState() const { 
+		return stageState; 
+	}
+	bool GetIsRotate() const { 
+		return isRotate; 
+	}
 
+	void SetStageState(StageState_ state) { stageState = state; }
+	void SetIsRotate(bool rotate) { isRotate = rotate; }
 private:
 	GameConfig() = default;
-
+	StageState_ stageState = TOP;
+	bool isRotate = false;
 };

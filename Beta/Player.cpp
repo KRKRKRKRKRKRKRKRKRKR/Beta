@@ -2,14 +2,14 @@
 
 void Player::Init() {
 	transform.Init({ 640.0f,360.0f }, 50.0f, 50.0f);
-	onGround = false;
+	isHitStage = false;
 	canChangeDirection = true;
 	directionLeft = 1;
 	hp = 3;
 }
 
-void Player::Update(char* keys, char* preKeys, const StageState_& stageState) {
-	Move(keys, preKeys, stageState);
+void Player::Update(char* keys, char* preKeys) {
+	Move(keys, preKeys);
 }
 
 void Player::Draw() {
@@ -24,40 +24,48 @@ void Player::Draw() {
 		static_cast<int>(transform.height),
 		playerTextureHandle, RED
 	);
-
 }
 
-void Player::Move(char* keys, char* preKeys, const StageState_& stageState) {
-	switch (stageState) {
-	case TOP:
-		if (keys[DIK_W] && preKeys[DIK_W]) {
-			transform.worldPos.y += 5.0f;
-		}
-		if (keys[DIK_S]) {
-			transform.worldPos.y -= 5.0f;
-		}
-		if (keys[DIK_A]) {
-			transform.worldPos.x -= 5.0f;
-		}
-		if (keys[DIK_D]) {
-			transform.worldPos.x += 5.0f;
-		}
-		break;
-
-	case BOTTOM:
-		if (keys[DIK_W]) {
-			transform.worldPos.y -= 5.0f;
-		}
-		if (keys[DIK_S]) {
-			transform.worldPos.y += 5.0f;
-		}
-		if (keys[DIK_A]) {
-			transform.worldPos.x += 5.0f;
-		}
-		if (keys[DIK_D]) {
-			transform.worldPos.x -= 5.0f;
-		}
-		break;
+void Player::Move(char* keys, char* preKeys) {
+	
+	//回転していない場合の重力処理
+	if (!GameConfig::GetInstance()->GetIsRotate() && !isHitStage) {
+		velocity.y -= gravity;
 	}
+		
+		
+	//地面に着地している場合の処理
+	if (isHitStage) {
+		switch (GameConfig::GetInstance()->GetStageState()) {
+		case GameConfig::TOP:
+			if (keys[DIK_A] && preKeys[DIK_A]) {
+				transform.worldPos.x -= walkSpeed;
+			}
+
+			if (keys[DIK_D]) {
+				transform.worldPos.x += walkSpeed;
+			}
+
+			gravity = 0.98f;
+			
+			break;
+		
+		case GameConfig::BOTTOM:
+			if (keys[DIK_A]) {
+				transform.worldPos.x += walkSpeed;
+			}
+
+			if (keys[DIK_D]) {
+				transform.worldPos.x -= walkSpeed;
+			}
+		
+			gravity = -0.98f;
+
+			break;
+		}
+	}
+	transform.worldPos.x += velocity.x;
+	transform.worldPos.y += velocity.y;
+	Novice::ScreenPrintf(0, 30, "Player Pos X: %.2f Y: %.2f", transform.worldPos.x, transform.worldPos.y);
 }
 

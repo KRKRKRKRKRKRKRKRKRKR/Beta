@@ -15,18 +15,14 @@ bool Collider::AABB(const Transform2D& obj1, const Transform2D& obj2) {
 	return true;
 }
 
-bool Collider::Clamp(Transform2D& obj, const Transform2D& stage) {
+bool Collider::ClampX(Transform2D& obj, const Transform2D& stage) {
 	bool isHitWall = false;
 
 	float stageLeft = stage.worldPos.x - stage.width / 2.0f;
 	float stageRight = stage.worldPos.x + stage.width / 2.0f;
-	float stageTop = stage.worldPos.y + stage.height / 2.0f;
-	float stageBottom = stage.worldPos.y - stage.height / 2.0f;
 
 	float objLeft = obj.worldPos.x - obj.width / 2.0f;
 	float objRight = obj.worldPos.x + obj.width / 2.0f;
-	float objTop = obj.worldPos.y + obj.height / 2.0f;
-	float objBottom = obj.worldPos.y - obj.height / 2.0f;
 
 	if (objLeft < stageLeft) {
 		obj.worldPos.x = stageLeft + obj.width / 2.0f;
@@ -36,7 +32,15 @@ bool Collider::Clamp(Transform2D& obj, const Transform2D& stage) {
 		obj.worldPos.x = stageRight - obj.width / 2.0f;
 		isHitWall = true;
 	}
+	return isHitWall;
+}
 
+bool Collider::ClampY(Transform2D& obj, const Transform2D& stage) {
+	bool isHitWall = false;
+	float stageTop = stage.worldPos.y + stage.height / 2.0f;
+	float stageBottom = stage.worldPos.y - stage.height / 2.0f;
+	float objTop = obj.worldPos.y + obj.height / 2.0f;
+	float objBottom = obj.worldPos.y - obj.height / 2.0f;
 	if (objTop > stageTop) {
 		obj.worldPos.y = stageTop - obj.height / 2.0f;
 		isHitWall = true;
@@ -45,6 +49,49 @@ bool Collider::Clamp(Transform2D& obj, const Transform2D& stage) {
 		obj.worldPos.y = stageBottom + obj.height / 2.0f;
 		isHitWall = true;
 	}
+	return isHitWall;
+}
 
+bool Collider::IsHitLeft(Transform2D& obj, const Transform2D& stage) {
+	bool isHitWall = false;
+	float stageLeft = stage.worldPos.x - stage.width / 2.0f;
+	float objLeft = obj.worldPos.x - obj.width / 2.0f;
+	if (objLeft < stageLeft) {
+		obj.worldPos.x = stageLeft + obj.width / 2.0f;
+		isHitWall = true;
+	}
+	return isHitWall;
+}
+
+bool Collider::IsHitRight(Transform2D& obj, const Transform2D& stage) {
+	bool isHitWall = false;
+	float stageRight = stage.worldPos.x + stage.width / 2.0f;
+	float objRight = obj.worldPos.x + obj.width / 2.0f;
+	if (objRight > stageRight) {
+		obj.worldPos.x = stageRight - obj.width / 2.0f;
+		isHitWall = true;
+	}
+	return isHitWall;
+}
+
+bool Collider::IsHitTop(Transform2D& obj, const Transform2D& stage) {
+	bool isHitWall = false;
+	float stageTop = stage.worldPos.y + stage.height / 2.0f;
+	float objTop = obj.worldPos.y + obj.height / 2.0f;
+	if (objTop > stageTop) {
+		obj.worldPos.y = stageTop - obj.height / 2.0f;
+		isHitWall = true;
+	}
+	return isHitWall;
+}
+
+bool Collider::IsHitBottom(Transform2D& obj, const Transform2D& stage) {
+	bool isHitWall = false;
+	float stageBottom = stage.worldPos.y - stage.height / 2.0f;
+	float objBottom = obj.worldPos.y - obj.height / 2.0f;
+	if (objBottom < stageBottom) {
+		obj.worldPos.y = stageBottom + obj.height / 2.0f;
+		isHitWall = true;
+	}
 	return isHitWall;
 }

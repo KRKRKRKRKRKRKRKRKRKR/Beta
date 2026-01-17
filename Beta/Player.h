@@ -2,16 +2,14 @@
 #include "Object2D.h"
 #include "Camera2D.h"
 #include "GameConfig.h"
+#include"Collider.h"
 #include <Novice.h>
 
 class Player {
 public:
 	void Init();
-	void Update(char* keys, char* preKeys);
+	void Update(char* keys, char* preKeys,const Transform2D & stage);
 	void Draw();
-	void SetHitStage(const bool& hit) { isHitStage = hit; }
-
-	Transform2D transform;										//データ
 private:
 	enum Direction {
 		LEFT,
@@ -19,17 +17,31 @@ private:
 		TOP,
 		BOTTOM
 	};
-
-	bool canChangeDirection;									//方向を変えることができるか
-	int directionLeft;											//方向変更残り回数
-	int hp;														//体力
+	Collider collider;											//当たり判定
+	Transform2D transform;										//データ
 	Vector2 velocity = {};										//速度
 	Direction direction;										//向いている方向
+	float gravityStrength = 0.5f;								//重力の強さ
+	Vector2 gravity = {0.0f,gravityStrength};					//重力
+	int directionChangeLeft = 2;								//方向変更残り回数
+	const int maxDirectionChange = 2;							//方向変更最大回数
+	int hp;														//体力
 	float walkSpeed = 5.0f;										//歩く速さ
-	float gravity = 0.98f;										//重力
+	bool canChangeGravity;										//方向を変えることができるか
+	bool isHitLeft = false;										//左に当たったか
+	bool isHitRight = false;									//右に当たったか
+	bool isHitTop = false;										//上に当たったか
+	bool isHitBottom = false;									//下に当たったか
 	bool isHitStage = false;									//ステージに当たったか
+	bool onGround = false;										//地面にいるか
 	int playerTextureHandle = Novice::LoadTexture("./BOX.png");	//テクスチャハンドル
 
-	void Move(char* keys, char* preKeys);
+	void Move(char* keys, char* preKeys,const Transform2D & stage);
+
+	// 地面にいるときの移動処理
+	void OnGroundMove(char*keys,char *preKeys);
+
+	//空中にいるときの移動処理
+	void InAirMove(char* keys, char* preKeys);
 
 };

@@ -39,9 +39,13 @@ private:
 	void Move(char* keys, char* preKeys,const Transform2D & stage);
 
 	// 地面にいるときの移動処理
-	void OnGroundMove(char*keys,char *preKeys);
+	void OnGroundMove();
 
 	//空中にいるときの移動処理
 	void InAirMove(char* keys, char* preKeys);
 
+	//ステージ内にクランプする処理
+	void ClampToStage(const Transform2D& stage);
+
+	void DebugOutput();
 };

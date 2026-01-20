@@ -270,7 +270,7 @@ void Player::RotateTexture() {
 		// ----------------------
 
 		// イージング初期化
-		rotateEasing.Init(current, finalTarget, 5, EasingType::EASING_EASE_IN_OUT_CUBIC);
+		rotateEasing.Init(current, finalTarget, 30 , EasingType::EASING_EASE_IN_OUT_CUBIC);
 		rotateEasing.Start();
 
 		preDirection = direction;
@@ -302,6 +302,6 @@ void Player::DebugOutput() {
 	Novice::ScreenPrintf(0, 210, "isHitRight: %s", (isHitRight == true ? "True" : "false"));
 
 	Novice::ScreenPrintf(0, 230, "StageState: %d", GameConfig::GetInstance()->GetStageState());
-	Novice::ScreenPrintf(0, 250, "0 = L,		1 = R,		2 = T,		B = 3");
+	Novice::ScreenPrintf(0, 250, "L = 0,		R = 1,		T = 2,		B = 3");
 	Novice::ScreenPrintf(0, 270, "TextureRotate %.2f",transform.rotation);
 }

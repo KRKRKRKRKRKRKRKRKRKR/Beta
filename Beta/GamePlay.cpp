@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "GamePlay.h"
 
 GamePlay::GamePlay() {
@@ -35,7 +37,7 @@ void GamePlay::CameraControl(char* keys, char* preKeys) {
 	if (config->GetStageState() != config->GetPrevStageState() && !cameraRotateEasing_.isMove) {
 		config->SetIsRotate(true);
 
-		float start = currentCameraRotation_;
+		float start = fmodf(currentCameraRotation_, 360.0f);;
 		float end = 0.0f;
 
 		switch (config->GetStageState()) {
@@ -55,19 +57,21 @@ void GamePlay::CameraControl(char* keys, char* preKeys) {
 			end = 90.0f;
 		}
 
+
+
 		float diff = end - start;
 
-		// 差が180度より大きい場合は、逆方向に回ったほうが速い
+		// 最短経路の計算
 		if (diff > 180.0f) {
-			end -= 360.0f; // 例: 270度なら -90度にする
+			diff -= 360.0f;
 		}
 		else if (diff < -180.0f) {
-			end += 360.0f; // 例: -270度なら 90度にする
+			diff += 360.0f;
 		}
 
 
 		cameraRotateEasing_.Reset();
-		cameraRotateEasing_.Init(start, end, 60, EasingType::EASING_EASE_IN_OUT_QUAD);
+		cameraRotateEasing_.Init(start, start + diff, 60, EasingType::EASING_EASE_IN_OUT_QUAD);
 		cameraRotateEasing_.Start();
 
 		config->SetPrevStageState(config->GetStageState());

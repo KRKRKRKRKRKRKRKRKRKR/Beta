@@ -10,6 +10,7 @@
 
 class Player {
 public:
+	Player();
 	void Init();
 	void Update(char* keys, char* preKeys,const Transform2D & stage);
 	void Draw();
@@ -23,6 +24,7 @@ private:
 	};
 
 	Collider collider;											//当たり判定
+	Vector2 size = { 68.0f,68.0f };								//サイズ
 	Transform2D transform;										//データ
 	Vector2 velocity = {};										//速度
 	Direction direction;										//向いている方向

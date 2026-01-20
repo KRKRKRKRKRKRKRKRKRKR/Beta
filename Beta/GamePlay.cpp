@@ -3,16 +3,17 @@
 #include "GamePlay.h"
 
 GamePlay::GamePlay() {
-
+	Init();
 }
 
-void GamePlay::Initialize() {
+void GamePlay::Init() {
 	Camera2D::cameraInfo cameraInfo;
 	Camera2D::GetInstance()->InitCameraTransform(cameraInfo, 1280.0f, 720.0f);
 	GameConfig::GetInstance()->SetStageState(GameConfig::TOP);
 	GameConfig::GetInstance()->SetPrevStageState(GameConfig::TOP);
 	currentCameraRotation_ = 0.0f;
 	player_.Init();
+	enemy_.Init(stage_.GetEnemySpawnRangeTransform());
 }
 
 void GamePlay::Update(char* keys, char* preKeys) {
@@ -27,6 +28,7 @@ void GamePlay::Update(char* keys, char* preKeys) {
 void GamePlay::Draw() {
 	stage_.Draw();
 	player_.Draw();
+	enemy_.Draw();
 }
 void GamePlay::CameraControl(char* keys, char* preKeys) {
 

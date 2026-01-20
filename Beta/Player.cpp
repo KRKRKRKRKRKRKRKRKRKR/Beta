@@ -2,9 +2,12 @@
 #include <cmath>
 #include "Player.h"
 
+Player::Player() {
+	Init();
+}
 void Player::Init() {
 	// 1. 基本ステータスのリセット
-	transform.Init({ 640.0f,360.0f }, 68.0f, 68.0f);	// 初期座標
+	transform.Init({ 640.0f,360.0f }, size.x, size.y);	// 初期座標
 	velocity = { 0.0f, 0.0f };							// 速度をゼロにする
 	hp = 3;
 
@@ -270,7 +273,7 @@ void Player::RotateTexture() {
 		// ----------------------
 
 		// イージング初期化
-		rotateEasing.Init(current, finalTarget, 30 , EasingType::EASING_EASE_IN_OUT_CUBIC);
+		rotateEasing.Init(current, finalTarget, 20 , EasingType::EASING_EASE_IN_OUT_CUBIC);
 		rotateEasing.Start();
 
 		preDirection = direction;

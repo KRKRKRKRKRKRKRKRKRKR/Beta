@@ -29,6 +29,15 @@
     <Filter Include="GamePlay\Collider">
       <UniqueIdentifier>{c572d1c1-d1ad-4b2f-a2ea-35596c749865}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GamePlay\GamePlay">
+      <UniqueIdentifier>{542d13d9-22dd-4181-88db-34c90e45ba2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay\GameConfig">
+      <UniqueIdentifier>{a46e7b3a-0f9d-4a7a-a721-c96aefb7ee52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay\Enemy">
+      <UniqueIdentifier>{663c3211-098b-42f2-974e-ba13218d0679}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -41,9 +50,6 @@
     <ClCompile Include="Easing.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
-    <ClCompile Include="GamePlay.cpp">
-      <Filter>GamePlay</Filter>
-    </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>GamePlay\Strage</Filter>
     </ClCompile>
@@ -52,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="Collider.cpp">
       <Filter>GamePlay\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlay.cpp">
+      <Filter>GamePlay\GamePlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>GamePlay\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,20 +157,23 @@
     <ClInclude Include="Object2D.h">
       <Filter>Tool</Filter>
     </ClInclude>
-    <ClInclude Include="GamePlay.h">
-      <Filter>GamePlay</Filter>
-    </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>GamePlay\Strage</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>GamePlay\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameConfig.h">
-      <Filter>GamePlay</Filter>
-    </ClInclude>
     <ClInclude Include="Collider.h">
       <Filter>GamePlay\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlay.h">
+      <Filter>GamePlay\GamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConfig.h">
+      <Filter>GamePlay\GameConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>GamePlay\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

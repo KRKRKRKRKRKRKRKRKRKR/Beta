@@ -21,29 +21,43 @@ void GamePlay::Init() {
 	StartWave(currentWave_);  // NEW
 
 }
-
 void GamePlay::Update(char* keys, char* preKeys) {
-	// Fixed dt: 1/60 sec each frame
-	dt_ = 1.0f / 60.0f;
+	// --- 1. Update slow‑motion timer ---
+	if (isInSlowMotion_) {
+		slowMotionFrames_--;
+		if (slowMotionFrames_ <= 0) {
+			isInSlowMotion_ = false;
+			slowMotionFrames_ = 0;
+		}
+	}
 
+	// --- 2. Choose dt for this frame ---
+	if (isInSlowMotion_) {
+		dt_ = slowDt_;
+	}
+	else {
+		dt_ = normalDt_;
+	}
+
+	// --- 3. Normal game logic using dt_ ---
 	CameraControl(keys, preKeys);
 	cameraRotateEasing_.Update();
 	Camera2D::GetInstance()->MoveCameraTransform();
+
 	player_.Update(keys, preKeys, stage_.GetTransform(), dt_);
-	enemy_.Update(stage_.GetEnemySpawnRangeTransform(),currentCameraRotation_, dt_);
-	// NEW: check collisions between player and enemies
+	enemy_.Update(stage_.GetEnemySpawnRangeTransform(), currentCameraRotation_, dt_);
+
 	CheckPlayerEnemyCollision();
+
 	if (IsWaveCleared()) {
 		if (currentWave_ < 5) {
 			currentWave_++;
 			StartWave(currentWave_);
 		}
 		else {
-			// All 5 waves cleared – you can add "game clear" logic here
-			// e.g., stop spawning or show message
+			// game clear logic
 		}
 	}
-	
 }
 
 void GamePlay::Draw() {
@@ -123,8 +137,13 @@ void GamePlay::CheckPlayerEnemyCollision() {
 			player_.OnHitEnemy();
 			enemy_.DeactivateEnemy(i);
 
-			// If you want only one collision processed per frame:
-			break;
+			// Start slow‑mo for 60 frames if not already active
+			if (!isInSlowMotion_) {
+				isInSlowMotion_ = true;
+				slowMotionFrames_ = 60;  // ~1 second at 60fps
+			}
+
+			break; // one collision per frame
 		}
 	}
 }

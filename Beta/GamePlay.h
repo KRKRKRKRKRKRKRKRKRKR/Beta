@@ -32,10 +32,9 @@ private:
 	int waveEnemyCounts_[5] = { 5, 10, 15, 20, 25 };  // NEW
 	// --- NEW: time control ---
 	float dt_ = 1.0f / 60.0f;             // current delta time
-	//const float normalDt_ = 1.0f / 60.0f; // normal speed
-	//const float slowDt_ = 1.0f / 240.0f; // slow motion like prototype
+	const float normalDt_ = 1.0f / 60.0f;
+	const float slowDt_ = 1.0f / 6000.0f; // 4x slower (tweak to taste)
 
-	//bool isInSlowMotion_ = false;
-	//int   slowMotionFrames_ = 0;            // use frames, not float seconds
-
+	bool isInSlowMotion_ = false;
+	int  slowMotionFrames_ = 0;        // remaining frames of slow‑mo
 };

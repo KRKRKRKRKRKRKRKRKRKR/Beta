@@ -34,6 +34,7 @@ void Player::Init() {
 	direction = TOP;
 	preDirection = TOP;
 	targetRotation = 0.0f;
+	worldRotateLeft_ = maxWorldRotate_; // start with 2
 }
 
 //更新処理
@@ -75,7 +76,7 @@ void Player::Move(char* keys, char* preKeys, const Transform2D& stage, float dt)
 		OnGroundMove();
 	}
 
-	if (!onGround && canChangeGravity) {
+	if (!onGround) {
 		InAirMove(keys, preKeys);
 	}
 
@@ -97,126 +98,130 @@ void Player::OnGroundMove() {
 	canChangeGravity = true;
 	velocity = { 0.0f,0.0f };
 	gravity = { 0.0f,0.0f };
-	directionChangeLeft = maxDirectionChange;
+	//directionChangeLeft = maxDirectionChange;
 }
 
 
 void Player::InAirMove(char* keys, char* preKeys) {
-	switch (GameConfig::GetInstance()->GetStageState()) {
-		//--------------------------------------------------------------------------
+	// No stock left => no more gravity changes
+	if (worldRotateLeft_ <= 0) {
+		return;
+	}
+
+	GameConfig* config = GameConfig::GetInstance();
+
+	switch (config->GetStageState()) {
+		//------------------------------------------------------------------
 	case GameConfig::TOP:
 		if (keys[DIK_W] && !preKeys[DIK_W]) {
 			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,gravityStrength };
-			directionChangeLeft--;
+			gravity = { 0.0f, gravityStrength };
+			worldRotateLeft_--;
 			direction = TOP;
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { 0.0f,-gravityStrength };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = BOTTOM;
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { -gravityStrength,0.0f };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = LEFT;
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { gravityStrength,0.0f };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = RIGHT;
 		}
 		break;
 
-		//----------------------------------------------------------------------
+		//------------------------------------------------------------------
 	case GameConfig::BOTTOM:
 		if (keys[DIK_W] && !preKeys[DIK_W]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { 0.0f,-gravityStrength };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = BOTTOM;
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
 			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,gravityStrength };
-			directionChangeLeft--;
+			gravity = { 0.0f, gravityStrength };
+			worldRotateLeft_--;
 			direction = TOP;
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { gravityStrength,0.0f };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = RIGHT;
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { -gravityStrength,0.0f };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = LEFT;
 		}
 		break;
-		//----------------------------------------------------------------------
+
+		//------------------------------------------------------------------
 	case GameConfig::LEFT:
 		if (keys[DIK_W] && !preKeys[DIK_W]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { -gravityStrength,0.0f };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = LEFT;
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { gravityStrength,0.0f };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = RIGHT;
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { 0.0f,-gravityStrength };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = BOTTOM;
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
 			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,gravityStrength };
-			directionChangeLeft--;
+			gravity = { 0.0f, gravityStrength };
+			worldRotateLeft_--;
 			direction = TOP;
 		}
 		break;
+
 		//------------------------------------------------------------------
 	case GameConfig::RIGHT:
 		if (keys[DIK_W] && !preKeys[DIK_W]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { gravityStrength,0.0f };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = RIGHT;
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { -gravityStrength,0.0f };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = LEFT;
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
 			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,gravityStrength };
-			directionChangeLeft--;
+			gravity = { 0.0f, gravityStrength };
+			worldRotateLeft_--;
 			direction = TOP;
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
 			velocity = { 0.0f,0.0f };
 			gravity = { 0.0f,-gravityStrength };
-			directionChangeLeft--;
+			worldRotateLeft_--;
 			direction = BOTTOM;
 		}
 		break;
-	}
-
-	//方向変更回数が0になったら重力変更不可
-	if (directionChangeLeft == 0) {
-		canChangeGravity = false;
 	}
 }
 
@@ -230,18 +235,26 @@ void Player::ClampToStage(const Transform2D& stage) {
 	if (gravity.x < 0 && isHitLeft) {
 		onGround = true;
 		GameConfig::GetInstance()->SetStageState(GameConfig::LEFT);
+		// Reset world rotation charges when back at TOP
+		ResetWorldRotate(maxWorldRotate_);
 	}
 	if (gravity.x > 0 && isHitRight) {
 		onGround = true;
 		GameConfig::GetInstance()->SetStageState(GameConfig::RIGHT);
+		// Reset world rotation charges when back at TOP
+		ResetWorldRotate(maxWorldRotate_);
 	}
 	if (gravity.y < 0 && isHitBottom) {
 		onGround = true;
 		GameConfig::GetInstance()->SetStageState(GameConfig::BOTTOM);
+		// Reset world rotation charges when back at TOP
+		ResetWorldRotate(maxWorldRotate_);
 	}
 	if (gravity.y > 0 && isHitTop) {
 		onGround = true;
 		GameConfig::GetInstance()->SetStageState(GameConfig::TOP);
+		// Reset world rotation charges when back at TOP
+		ResetWorldRotate(maxWorldRotate_);
 	}
 }
 
@@ -311,6 +324,22 @@ void Player::OnHitEnemy() {
 	// DO NOT call Init() here. That would reset direction, gravity, etc.
 }
 
+void Player::ConsumeWorldRotate() {
+	if (worldRotateLeft_ > 0) {
+		worldRotateLeft_--;
+	}
+}
+
+void Player::ResetWorldRotate(int value) {
+	worldRotateLeft_ = value;
+	if (worldRotateLeft_ > maxWorldRotate_) {
+		worldRotateLeft_ = maxWorldRotate_;
+	}
+	if (worldRotateLeft_ < 0) {
+		worldRotateLeft_ = 0;
+	}
+}
+
 
 void Player::DebugOutput() {
 	Novice::ScreenPrintf(0, 0, "Player Debug Output");
@@ -333,4 +362,5 @@ void Player::DebugOutput() {
 	Novice::ScreenPrintf(0, 230, "StageState: %d", GameConfig::GetInstance()->GetStageState());
 	Novice::ScreenPrintf(0, 250, "L = 0,		R = 1,		T = 2,		B = 3");
 	Novice::ScreenPrintf(0, 270, "TextureRotate %.2f",transform.rotation);
+	Novice::ScreenPrintf(0, 290, "WorldRotateLeft: %d", worldRotateLeft_);
 }

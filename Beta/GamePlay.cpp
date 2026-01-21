@@ -73,6 +73,16 @@ void GamePlay::CameraControl(char* keys, char* preKeys) {
 
 	}
 	if (config->GetStageState() != config->GetPrevStageState() && !cameraRotateEasing_.isMove) {
+		// NEW: only allow rotation if player still has charges
+		if (player_.GetWorldRotateLeft() <= 0) {
+			// cancel the state change, restore previous
+			config->SetStageState(config->GetPrevStageState());
+			return;
+		}
+
+		// consume one rotation charge
+		player_.ConsumeWorldRotate();
+
 		config->SetIsRotate(true);
 
 		float start = fmodf(currentCameraRotation_, 360.0f);;
@@ -136,6 +146,11 @@ void GamePlay::CheckPlayerEnemyCollision() {
 			// Collision detected
 			player_.OnHitEnemy();
 			enemy_.DeactivateEnemy(i);
+
+
+			// Reset world rotation charges to 1 when an enemy is defeated
+			player_.ResetWorldRotate(1);
+
 
 			// Start slow‑mo for 60 frames if not already active
 			if (!isInSlowMotion_) {

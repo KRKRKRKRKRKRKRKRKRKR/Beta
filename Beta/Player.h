@@ -23,6 +23,9 @@ public:
 	void OnHitEnemy();
 
 	bool IsInvincible() const { return invincibleTime_ > 0; }
+	int GetWorldRotateLeft() const { return worldRotateLeft_; }
+	void ConsumeWorldRotate();     // use 1 rotation
+	void ResetWorldRotate(int value); // set directly
 private:
 	//プレイヤーの向き
 	enum Direction {
@@ -56,6 +59,9 @@ private:
 	
 	int invincibleTime_ = 0;     // frames of invincibility after hit
 	int invincibleDuration_ = 60;
+	// Player.h (private)
+	int worldRotateLeft_ = 2;   // how many times the player can rotate the world
+	const int maxWorldRotate_ = 3;
 	int playerTextureHandle = Novice::LoadTexture("./Textures/Characters/Player/player.png");	//テクスチャハンドル
 	void Move(char* keys, char* preKeys,const Transform2D & stage, float dt);
 

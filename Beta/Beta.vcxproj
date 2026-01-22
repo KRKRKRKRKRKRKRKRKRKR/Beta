@@ -163,12 +163,17 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="CreditScene.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="RankingScene.cpp" />
+    <ClCompile Include="SenceManager.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -203,13 +208,18 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="CreditScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="GamePlay.h" />
     <ClInclude Include="Object2D.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="RankingScene.h" />
+    <ClInclude Include="Sence.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

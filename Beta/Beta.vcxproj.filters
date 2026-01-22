@@ -53,6 +53,9 @@
     <Filter Include="GamePlay\background">
       <UniqueIdentifier>{a2a7a003-31a1-4647-b964-6d43e39a17a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tool\Sence">
+      <UniqueIdentifier>{e9d4bdac-c692-47fc-b8bc-0abfe69933a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -85,6 +88,21 @@
     </ClCompile>
     <ClCompile Include="Background.cpp">
       <Filter>GamePlay\background</Filter>
+    </ClCompile>
+    <ClCompile Include="SenceManager.cpp">
+      <Filter>Tool\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Tool\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Tool\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditScene.cpp">
+      <Filter>Tool\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="RankingScene.cpp">
+      <Filter>Tool\Sence</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +222,21 @@
     </ClInclude>
     <ClInclude Include="Background.h">
       <Filter>GamePlay\background</Filter>
+    </ClInclude>
+    <ClInclude Include="Sence.h">
+      <Filter>Tool\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Tool\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Tool\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditScene.h">
+      <Filter>Tool\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="RankingScene.h">
+      <Filter>Tool\Sence</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

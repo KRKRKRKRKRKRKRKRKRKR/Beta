@@ -1,4 +1,4 @@
-#define _USE_MATH_DEFINES
+﻿#define _USE_MATH_DEFINES
 #include <cmath>
 #include "Player.h"
 
@@ -7,13 +7,12 @@ Player::Player() {
 }
 void Player::Init() {
 	// 1. 基本ステータスのリセット
-	transform.Init({ 640.0f,360.0f }, size.x, size.y);	// 初期座標
+	transform.Init({ 640.0f,626.0f }, size.x, size.y);	// 初期座標
 	velocity = { 0.0f, 0.0f };							// 速度をゼロにする
-	hp = 3;
 
 	// 2. フラグ類のリセット
 	isHitStage = false;
-	onGround = false;
+	onGround = true;
 	canChangeGravity = true;
 
 	// 当たり判定フラグもすべて偽にリセット
@@ -45,7 +44,6 @@ void Player::Update(char* keys, char* preKeys, const Transform2D& stage) {
 //描画処理
 void Player::Draw() {
 
-	DebugOutput();
 	Quad screen = CameraManager::GetInstance()->GetMainCamera().WorldToScreen(transform);
 	Novice::DrawQuad(
 		static_cast<int>(screen.v[0].x), static_cast<int>(screen.v[0].y),
@@ -55,8 +53,10 @@ void Player::Draw() {
 		0, 0,
 		static_cast<int>(transform.width),
 		static_cast<int>(transform.height),
-		playerTextureHandle, WHITE
+		playerTextureHandle[directionChangeLeft], WHITE
 	);
+
+	Novice::ScreenPrintf(0,20,"PlayerDirectionLeft = %d",directionChangeLeft);
 }
 
 //移動処理
@@ -66,10 +66,15 @@ void Player::Move(char* keys, char* preKeys, const Transform2D& stage) {
 		return;
 	}
 
+	//回数回復処理
+	RecoverCount();
+
+	//地面にいる場合の処理
 	if (onGround) {
 		OnGroundMove();
 	}
 
+	//空中での処理
 	if (!onGround && canChangeGravity) {
 		InAirMove(keys, preKeys);
 	}
@@ -81,13 +86,17 @@ void Player::Move(char* keys, char* preKeys, const Transform2D& stage) {
 	transform.worldPos.x += velocity.x;
 	transform.worldPos.y += velocity.y;
 
+
 	onGround = false;
 
 	ClampToStage(stage);
-
+	
 }
 
 void Player::OnGroundMove() {
+	if (!onGround) {
+		return;
+	}
 	onGround = false;
 	canChangeGravity = true;
 	velocity = { 0.0f,0.0f };
@@ -101,120 +110,150 @@ void Player::InAirMove(char* keys, char* preKeys) {
 		//--------------------------------------------------------------------------
 	case GameConfig::TOP:
 		if (keys[DIK_W] && !preKeys[DIK_W]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,gravityStrength };
-			directionChangeLeft--;
-			direction = TOP;
+			if (direction != TOP) {
+				velocity = { 0.0f,0.0f };
+				gravity = { 0.0f,gravityStrength };
+				directionChangeLeft--;
+				direction = TOP;
+			}
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,-gravityStrength };
-			directionChangeLeft--;
-			direction = BOTTOM;
+			if (direction != BOTTOM) {
+				velocity = { 0.0f,0.0f };
+				gravity = { 0.0f,-gravityStrength };
+				directionChangeLeft--;
+				direction = BOTTOM;
+			}
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { -gravityStrength,0.0f };
-			directionChangeLeft--;
-			direction = LEFT;
+			if (direction != LEFT) {
+				velocity = { 0.0f,0.0f };
+				gravity = { -gravityStrength,0.0f };
+				directionChangeLeft--;
+				direction = LEFT;
+			}
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { gravityStrength,0.0f };
-			directionChangeLeft--;
-			direction = RIGHT;
+			if (direction != RIGHT) {
+				velocity = { 0.0f,0.0f };
+				gravity = { gravityStrength,0.0f };
+				directionChangeLeft--;
+				direction = RIGHT;
+			}
 		}
 		break;
 
 		//----------------------------------------------------------------------
 	case GameConfig::BOTTOM:
 		if (keys[DIK_W] && !preKeys[DIK_W]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,-gravityStrength };
-			directionChangeLeft--;
-			direction = BOTTOM;
+			if (direction != BOTTOM) {
+				velocity = { 0.0f,0.0f };
+				gravity = { 0.0f,-gravityStrength };
+				directionChangeLeft--;
+				direction = BOTTOM;
+			}
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,gravityStrength };
-			directionChangeLeft--;
-			direction = TOP;
+			if (direction != TOP) {
+				velocity = { 0.0f,0.0f };
+				gravity = { 0.0f,gravityStrength };
+				directionChangeLeft--;
+				direction = TOP;
+			}
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { gravityStrength,0.0f };
-			directionChangeLeft--;
-			direction = RIGHT;
+			if (direction != RIGHT) {
+				velocity = { 0.0f,0.0f };
+				gravity = { gravityStrength,0.0f };
+				directionChangeLeft--;
+				direction = RIGHT;
+			}
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { -gravityStrength,0.0f };
-			directionChangeLeft--;
-			direction = LEFT;
+			if (direction != LEFT) {
+				velocity = { 0.0f,0.0f };
+				gravity = { -gravityStrength,0.0f };
+				directionChangeLeft--;
+				direction = LEFT;
+			}
 		}
 		break;
 		//----------------------------------------------------------------------
 	case GameConfig::LEFT:
 		if (keys[DIK_W] && !preKeys[DIK_W]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { -gravityStrength,0.0f };
-			directionChangeLeft--;
-			direction = LEFT;
+			if (direction != LEFT) {
+				velocity = { 0.0f,0.0f };
+				gravity = { -gravityStrength,0.0f };
+				directionChangeLeft--;
+				direction = LEFT;
+			}
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { gravityStrength,0.0f };
-			directionChangeLeft--;
-			direction = RIGHT;
+			if (direction != RIGHT) {
+				velocity = { 0.0f,0.0f };
+				gravity = { gravityStrength,0.0f };
+				directionChangeLeft--;
+				direction = RIGHT;
+			}
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,-gravityStrength };
-			directionChangeLeft--;
-			direction = BOTTOM;
+			if (direction != BOTTOM) {
+				velocity = { 0.0f,0.0f };
+				gravity = { 0.0f,-gravityStrength };
+				directionChangeLeft--;
+				direction = BOTTOM;
+			}
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,gravityStrength };
-			directionChangeLeft--;
-			direction = TOP;
+			if (direction != TOP) {
+				velocity = { 0.0f,0.0f };
+				gravity = { 0.0f,gravityStrength };
+				directionChangeLeft--;
+				direction = TOP;
+			}
 		}
 		break;
 		//------------------------------------------------------------------
 	case GameConfig::RIGHT:
 		if (keys[DIK_W] && !preKeys[DIK_W]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { gravityStrength,0.0f };
-			directionChangeLeft--;
-			direction = RIGHT;
+			if (direction != RIGHT) {
+				velocity = { 0.0f,0.0f };
+				gravity = { gravityStrength,0.0f };
+				directionChangeLeft--;
+				direction = RIGHT;
+			}
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { -gravityStrength,0.0f };
-			directionChangeLeft--;
-			direction = LEFT;
+			if (direction != LEFT) {
+				velocity = { 0.0f,0.0f };
+				gravity = { -gravityStrength,0.0f };
+				directionChangeLeft--;
+				direction = LEFT;
+			}
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,gravityStrength };
-			directionChangeLeft--;
-			direction = TOP;
+			if (direction != TOP) {
+				velocity = { 0.0f,0.0f };
+				gravity = { 0.0f,gravityStrength };
+				directionChangeLeft--;
+				direction = TOP;
+			}
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
-			velocity = { 0.0f,0.0f };
-			gravity = { 0.0f,-gravityStrength };
-			directionChangeLeft--;
-			direction = BOTTOM;
+			if (direction != BOTTOM) {
+				velocity = { 0.0f,0.0f };
+				gravity = { 0.0f,-gravityStrength };
+				directionChangeLeft--;
+				direction = BOTTOM;
+			}
 		}
 		break;
 	}
-
-	//方向変更回数が0になったら重力変更不可
-	if (directionChangeLeft == 0) {
+	if (directionChangeLeft <= 0) {
 		canChangeGravity = false;
 	}
-}
 
+}
 void Player::ClampToStage(const Transform2D& stage) {
 	//当たり判定
 	isHitLeft = collider.IsHitLeft(transform, stage);
@@ -282,28 +321,22 @@ void Player::RotateTexture() {
 	// 更新と反映
 	rotateEasing.Update();
 	transform.rotation = rotateEasing.easingRate;
+	transform.Init(transform.worldPos, transform.width, transform.height, transform.rotation);
 }
 
+//回復カウント処理
+void Player::RecoverCount() {
+	if (isHitEnemy) {
+		isHitEnemy = false;
+		directionChangeLeft++;
+		if (directionChangeLeft > maxDirectionChange) {
+			directionChangeLeft = maxDirectionChange;
+		}
 
-void Player::DebugOutput() {
-	Novice::ScreenPrintf(0, 0, "Player Debug Output");
-	Novice::ScreenPrintf(0, 30, "Player Pos X: %.2f Y: %.2f", transform.worldPos.x, transform.worldPos.y);
-	Novice::ScreenPrintf(0, 50, "Player OnGround = %s", (onGround == true ? "True" : "false"));
-	Novice::ScreenPrintf(0, 70, "Gravity X: %.2f Y: %.2f", gravity.x, gravity.y);
-	Novice::ScreenPrintf(0, 90, "Velocity X: %.2f Y: %.2f", velocity.x, velocity.y);
-	Novice::ScreenPrintf(0, 110, "DirectionChangeLeft: %d", directionChangeLeft);
-	//回転しているか
-	Novice::ScreenPrintf(0, 130, "IsRotate: %s", (GameConfig::GetInstance()->GetIsRotate() == true ? "true" : "false"));
+	}
 
-	//top
-	Novice::ScreenPrintf(0, 150, "isHitTop: %s", (isHitTop == true ? "True" : "false"));
-	//bottom
-	Novice::ScreenPrintf(0, 170, "isHitBottom: %s", (isHitBottom == true ? "True" : "false"));
-	//left
-	Novice::ScreenPrintf(0, 190, "isHitLeft: %s", (isHitLeft == true ? "True" : "false"));
-	//right
-	Novice::ScreenPrintf(0, 210, "isHitRight: %s", (isHitRight == true ? "True" : "false"));
-	Novice::ScreenPrintf(0, 230, "StageState: %d", GameConfig::GetInstance()->GetStageState());
-	Novice::ScreenPrintf(0, 250, "L = 0,		R = 1,		T = 2,		B = 3");
-	Novice::ScreenPrintf(0, 270, "TextureRotate %.2f",transform.rotation);
+	if (directionChangeLeft > 0) {
+		canChangeGravity = true;
+	}
+
 }

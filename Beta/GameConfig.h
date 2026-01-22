@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 class GameConfig {
 public:
@@ -22,9 +22,19 @@ public:
 	void SetIsRotate(bool rotate) { isRotate = rotate; }
 	void SetPrevStageState(StageState_ state) { prevStageState = state; }
 
+
+	int GetCurrentStage()const { return currentStage; }
+	void SetCurrentStage(int stage) { currentStage = stage; }
+	void NextStage() { currentStage++; }
+
+	bool GetIsFinishedStage() const { return isFinishedStage; }
+	void SetIsFinishedStage(bool finished) { isFinishedStage = finished; }
+
 private:
 	GameConfig() = default;
 	StageState_ stageState = TOP;
 	StageState_ prevStageState = TOP;
 	bool isRotate = false;
+	int currentStage = 0;
+	bool isFinishedStage = false; //ステージクリアフラグ
 };

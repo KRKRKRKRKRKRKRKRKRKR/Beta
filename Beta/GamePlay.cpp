@@ -1,4 +1,4 @@
-#define _USE_MATH_DEFINES
+﻿#define _USE_MATH_DEFINES
 #include <cmath>
 #include "GamePlay.h"
 
@@ -39,29 +39,21 @@ void GamePlay::Update(char* keys, char* preKeys) {
 	//カメラ操作
 	CameraControl(keys, preKeys);
 
-	// カメライージング更新
+	CameraManager::GetInstance()->UpdateAll();
+	// カメライージング更新
 	cameraRotateEasing_.Update();
 
 	//プレイヤー更新
 	player_.Update(keys, preKeys, stage_.GetTransform());
 
 	//敵更新
-	enemy_.Update(stage_.GetEnemySpawnRangeTransform(),currentCameraRotation_);
-	if (keys[DIK_UPARROW]) {
-		mainCameraInfo.centerpos.y += 5.0f;
-	}
-	if (keys[DIK_DOWNARROW]) {
-		mainCameraInfo.centerpos.y -= 5.0f;
-	}
-	if (keys[DIK_LEFTARROW]) {
-		mainCameraInfo.centerpos.x -= 5.0f;
-	}
-	if (keys[DIK_RIGHTARROW]) {
-		mainCameraInfo.centerpos.x += 5.0f;
-	}
-	// カメラ更新
-	CameraManager::GetInstance()->UpdateAll();
-	CameraManager::GetInstance()->GetMainCamera().InitCameraTransform(mainCameraInfo, 1280.0f, 720.0f);
+	enemy_.Update(stage_.GetEnemySpawnRangeTransform(),currentCameraRotation_,player_.IsOnGround());
+
+	//プレイヤーが敵に当たったか
+	PlayerIsHitEnemy();
+
+	//次のステージへ進むかの判定
+	NextStageCheck();
 
 }
 
@@ -71,18 +63,15 @@ void GamePlay::Draw() {
 	player_.Draw();
 	enemy_.Draw();
 	ui_.Draw();
+	DebugText();
+}
+
+void GamePlay::DebugText() {
+	Novice::ScreenPrintf(0, 0, "CurrentStage = %d",GameConfig::GetInstance()->GetCurrentStage());
 }
 
 
-
-
-
-
-
-
-
-
-
+//カメラ操作
 void GamePlay::CameraControl(char* keys, char* preKeys) {
 
 	GameConfig* config = GameConfig::GetInstance();
@@ -139,3 +128,33 @@ void GamePlay::CameraControl(char* keys, char* preKeys) {
 	currentCameraRotation_ = cameraRotateEasing_.easingRate;
 }
 
+//プレイヤーが敵に当たったか
+bool GamePlay::PlayerIsHitEnemy() {
+	const Transform2D& playerTransform = player_.GetTransform();
+
+	// 非const参照で取得
+	std::vector<Enemy::EnemyData>& enemies = enemy_.GetEnemies();
+	for (auto& enemy : enemies) {
+		if (!enemy.isActive) {
+			continue;
+		}
+		if (collider_.AABB(playerTransform, enemy.transform)) {
+			enemy.isActive = false; // 生存フラグをfalse
+			player_.SetIsHitEnemy(true); // プレイヤーに当たりフラグを設定
+			return true; // 衝突が検出された場合、trueを返す
+		}
+	}
+	return false;
+}
+
+void GamePlay::NextStageCheck() {
+	if (enemy_.IsAllDead()) {
+		if (!isNextStageAdded) {
+			GameConfig::GetInstance()->NextStage();
+			isNextStageAdded = true;
+		}
+	} else {
+		// 敵が復活したらフラグをリセット
+		isNextStageAdded = false;
+	}
+}

@@ -1,4 +1,4 @@
-#include "Enemy.h"
+﻿#include "Enemy.h"
 #include <random>
 
 Enemy::Enemy() {
@@ -13,10 +13,13 @@ void Enemy::Init(const Transform2D& spawnStage) {
 	SpawnEnemy(spawnStage);
 }
 
-void Enemy::Update(const Transform2D& spawnStage,float cameraRotate) {
+
+void Enemy::Update(const Transform2D& spawnStage,float cameraRotate,bool playerIsOnGround) {
 	Move();
 	ClampToStage(spawnStage);
 	RotateTexture(cameraRotate);
+	Respawn(spawnStage,playerIsOnGround);
+	CheckAllDead();
 }
 
 void Enemy::Draw() {
@@ -35,14 +38,24 @@ void Enemy::Draw() {
 			0, 0,
 			static_cast<int>(enemy.transform.width),
 			static_cast<int>(enemy.transform.height),
-			count3Texture, WHITE
+			count6Texture, WHITE
 		);
 	}
 }
 
+void Enemy::SetEnemyData(const std::vector<EnemyData>& newEnemies) {
+	enemies = newEnemies;
+}
+
 //敵スポーン処理
 void Enemy::SpawnEnemy(const Transform2D& spawnStage) {
-	for (int i = 0; i < maxEnemiesSpawnCount; i++) {
+	enemies.clear();
+	int stage = GameConfig::GetInstance()->GetCurrentStage();
+	if (stage > 4) {
+		stage = 4;
+	}
+	int spawnCount = stageEnemyCount[stage]; // ステージに応じてスポーン数を増加
+	for (int i = 0; i < spawnCount; i++) {
 		EnemyData newEnemy;
 
 		float enemyHW = newEnemy.transform.width / 2.0f;
@@ -75,6 +88,7 @@ void Enemy::SpawnEnemy(const Transform2D& spawnStage) {
 	}
 }
 
+//敵移動処理
 void Enemy::Move() {
 	for (EnemyData& enemy : enemies) {
 		if (!enemy.isActive) {
@@ -85,6 +99,7 @@ void Enemy::Move() {
 	}
 }
 
+//ステージ内にクランプする処理
 void Enemy::ClampToStage(const Transform2D& spawnStage) {
 	for (EnemyData& enemy : enemies) {
 		if (!enemy.isActive) {
@@ -123,6 +138,7 @@ void Enemy::ClampToStage(const Transform2D& spawnStage) {
 	}
 }
 
+//テクスチャ回転処理
 void Enemy::RotateTexture(float cameraRotate) {
 	for (EnemyData& enemy : enemies) {
 		if (!enemy.isActive) {
@@ -132,6 +148,28 @@ void Enemy::RotateTexture(float cameraRotate) {
 	}
 }
 
+//全滅判定処理
+void Enemy::CheckAllDead() {
+	bool anyActive = false;
+	for (const EnemyData& enemy : enemies) {
+		if (enemy.isActive) {
+			anyActive = true;
+			break;
+		}
+	}
+	allDead = !anyActive;
+}
+
+//リスポーン処理
+void Enemy::Respawn(const Transform2D& spawnStage,bool playerIsOnGround) {
+	// 全ての敵が死亡している場合のみリスポーン処理を実行
+	if (allDead && playerIsOnGround) {
+
+		enemies.clear();
+		SpawnEnemy(spawnStage);
+		allDead = false;
+	}
+}
 float Enemy::GetRandomFloat(float min, float max) {
 	static std::random_device rd;
 	static std::mt19937 mt(rd());

@@ -9,7 +9,7 @@
 #include "Enemy.h"
 #include "UI.h"
 #include "Background.h"
-
+#include <vector>
 
 
 class GamePlay {
@@ -19,7 +19,6 @@ public:
 	void Init();									//初期化
 	void Update(char* keys, char* preKeys);			//更新	
 	void Draw();									//描画
-
 private:
 
 	Stage stage_;									//ステージ
@@ -33,5 +32,9 @@ private:
 	void CameraControl(char* keys, char* preKeys);	//カメラ操作
 	Camera2D::cameraInfo mainCameraInfo;
 	Camera2D::cameraInfo uiCameraInfo;
+	bool PlayerIsHitEnemy();						//プレイヤーが敵に当たったか
+	void DebugText();								//デバッグテキスト表示
+	void NextStageCheck();							//次のステージへ進むかの判定
+	bool isNextStageAdded = false;
 
 };

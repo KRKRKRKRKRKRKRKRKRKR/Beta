@@ -1,4 +1,4 @@
-#include "Collider.h"
+﻿#include "Collider.h"
 
 bool Collider::AABB(const Transform2D& obj1, const Transform2D& obj2) {
 	float left1 = obj1.worldPos.x - obj1.width / 2.0f;
@@ -15,6 +15,21 @@ bool Collider::AABB(const Transform2D& obj1, const Transform2D& obj2) {
 	return true;
 }
 
+bool Collider::IsHitPoint(const Vector2 point, const Transform2D& obj) {
+	bool isHitPoint = false;
+
+	float objLeft = obj.worldPos.x - obj.width / 2.0f;
+	float objRight = obj.worldPos.x + obj.width / 2.0f;
+	float objTop = obj.worldPos.y + obj.height / 2.0f;
+	float objBottom = obj.worldPos.y - obj.height / 2.0f;
+
+	if (point.x >= objLeft && point.x <= objRight &&
+		point.y >= objBottom && point.y <= objTop) {
+		isHitPoint = true;
+	}
+	return isHitPoint;
+}
+
 bool Collider::ClampX(Transform2D& obj, const Transform2D& stage) {
 	bool isHitWall = false;
 
@@ -27,8 +42,7 @@ bool Collider::ClampX(Transform2D& obj, const Transform2D& stage) {
 	if (objLeft < stageLeft) {
 		obj.worldPos.x = stageLeft + obj.width / 2.0f;
 		isHitWall = true;
-	}
-	else if (objRight > stageRight) {
+	} else if (objRight > stageRight) {
 		obj.worldPos.x = stageRight - obj.width / 2.0f;
 		isHitWall = true;
 	}
@@ -44,8 +58,7 @@ bool Collider::ClampY(Transform2D& obj, const Transform2D& stage) {
 	if (objTop > stageTop) {
 		obj.worldPos.y = stageTop - obj.height / 2.0f;
 		isHitWall = true;
-	}
-	else if (objBottom < stageBottom) {
+	} else if (objBottom < stageBottom) {
 		obj.worldPos.y = stageBottom + obj.height / 2.0f;
 		isHitWall = true;
 	}

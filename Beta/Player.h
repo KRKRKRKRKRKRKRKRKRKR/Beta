@@ -12,8 +12,13 @@ class Player {
 public:
 	Player();
 	void Init();
-	void Update(char* keys, char* preKeys,const Transform2D & stage);
+	void Update(char* keys, char* preKeys, const Transform2D& stage);
 	void Draw();
+	const Transform2D& GetTransform() const { return transform; }
+	void SetIsHitEnemy(bool hit) { isHitEnemy = hit; }
+
+	bool IsOnGround() const { return onGround; }
+
 private:
 	//プレイヤーの向き
 	enum Direction {
@@ -24,16 +29,15 @@ private:
 	};
 
 	Collider collider;											//当たり判定
-	Vector2 size = { 68.0f,68.0f };								//サイズ
+	Vector2 size = { 52.0f,60.0f };								//サイズ
 	Transform2D transform;										//データ
 	Vector2 velocity = {};										//速度
 	Direction direction;										//向いている方向
 	Direction preDirection;										//前の向いている方向
 	float gravityStrength = 0.5f;								//重力の強さ
-	Vector2 gravity = {0.0f,gravityStrength};					//重力
+	Vector2 gravity = { 0.0f,gravityStrength };					//重力
 	int directionChangeLeft = 2;								//方向変更残り回数
 	const int maxDirectionChange = 2;							//方向変更最大回数
-	int hp;														//体力
 	float walkSpeed = 5.0f;										//歩く速さ
 	bool canChangeGravity;										//方向を変えることができるか
 	bool isHitLeft = false;										//左に当たったか
@@ -44,8 +48,16 @@ private:
 	bool onGround = false;										//地面にいるか
 	Easing rotateEasing;										//テクスチャ回転イージング
 	float targetRotation = 0.0f;								//目標回転角度
-	int playerTextureHandle = Novice::LoadTexture("./Textures/Characters/Player/player.png");	//テクスチャハンドル
-	void Move(char* keys, char* preKeys,const Transform2D & stage);
+	bool isHitEnemy = false;									//敵に当たったか
+
+	//プレイヤーテクスチャ
+	int playerTextureHandle[3] = {
+		Novice::LoadTexture("./Textures/Characters/Player/player3.png"),
+		Novice::LoadTexture("./Textures/Characters/Player/player2.png"),
+		Novice::LoadTexture("./Textures/Characters/Player/player1.png"),
+	};
+
+	void Move(char* keys, char* preKeys, const Transform2D& stage);
 
 	// 地面にいるときの移動処理
 	void OnGroundMove();
@@ -59,6 +71,6 @@ private:
 	//テクスチャ回転処理
 	void RotateTexture();
 
-	//デバッグ出力
-	void DebugOutput();
+	//回数回復処理
+	void RecoverCount();
 };

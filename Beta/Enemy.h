@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Novice.h>
 #include "Object2D.h"
 #include "CameraManager.h"
@@ -9,17 +9,10 @@
 
 class Enemy{
 public:
-	Enemy();
-	Enemy(const Transform2D & spawnStage);
-	void Init(const Transform2D & spawnStage);
-	void Update(const Transform2D& spawnStage,float cameraRotate);
-	void Draw();
-private:
-
 	//敵データ構造体
 	struct EnemyData {
 		Transform2D transform;				//データ
-		Vector2 size = { 68.0f,68.0f };		//サイズ
+		Vector2 size = { 40.0f,40.0f };		//サイズ
 		Collider collider;					//当たり判定
 		Vector2 velocity = {};				//速度
 		int moveType;						//移動軸 x = 0, y = 1
@@ -28,9 +21,30 @@ private:
 		bool isActive;						//生存フラグ
 	};
 
+	Enemy();
+	Enemy(const Transform2D & spawnStage);
+
+	//初期化
+	void Init(const Transform2D & spawnStage);
+
+	//更新
+	void Update(const Transform2D& spawnStage,float cameraRotate,bool playerIsOnGround);
+
+	//描画
+	void Draw();
+
+	//敵データ配列取得 
+	std::vector<EnemyData>& GetEnemies() { return enemies; }
+
+	//敵データ配列設定
+	void SetEnemyData(const std::vector<EnemyData>& newEnemies);
+
+	//全滅判定取得
+	bool IsAllDead() const { return allDead; }
+
+private:
 	//敵データ配列
 	std::vector<EnemyData> enemies;
-	const int maxEnemiesSpawnCount = 25;	//最大敵数
 	
 	Easing rotateEasing;				//テクスチャ回転イージング
 	float targetRotation = 0.0f;		//目標回転角度
@@ -41,7 +55,7 @@ private:
 	int count3Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy3.png");
 	int count4Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy4.png");
 	int count5Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy5.png");
-	int count6Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy6.png");
+	int count6Texture = Novice::LoadTexture("./Textures/Characters/Enemy/40enemy6.png");
 
 	//敵スポーン処理
 	void SpawnEnemy(const Transform2D & spawnStage);
@@ -55,8 +69,19 @@ private:
 	//テクスチャ回転処理
 	void RotateTexture(float cameraRotate);
 
+	bool allDead = false;
+
+	//全滅判定処理
+	void CheckAllDead();
+
+	//リスポーン処理
+	void Respawn(const Transform2D& spawnStage,bool playerIsOnGround);
+	//ランダム関数
 	float GetRandomFloat(float min, float max);
 	int GetRandomInt(int min, int max);
+
+	//ステージごとの敵出現数
+	int stageEnemyCount[5] = { 10,20,30,40,50 };
 
 };
 

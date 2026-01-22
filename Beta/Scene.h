@@ -1,4 +1,5 @@
 #pragma once
+#include "Easing.h"
 
 enum class SceneType
 {
@@ -26,11 +27,24 @@ public:
 	void UpdateCurrentScene(char* keys, char* preKeys);
 	void DrawCurrentScene();
 
-	SceneType GetCurrentSceneType() const { return currentType; }
+	SceneType GetCurrentSceneType() const { return currentType_; }
 
 private:
-	Scene* currentScene;
-	SceneType currentType;
+	Scene* currentScene_ = nullptr;
+	SceneType currentType_ = SceneType::Title;
+
+	bool inTransition_ = false;
+	bool switchingDone_ = false;
+	SceneType nextType_ = SceneType::Title;
+
+	int phase_ = 0;
+	int transitionTotalFrame_ = 8;
+	Easing vertEasing_;
+	Easing horizEasing_;
+
+	void StartTransition( SceneType to);
+	void UpdateTransition();
+	void DrawTransitionOverlay();
 };
 
 

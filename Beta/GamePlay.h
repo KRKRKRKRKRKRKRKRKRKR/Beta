@@ -29,7 +29,7 @@ private:
 	Collider collider_;								//当たり判定
 	Easing cameraRotateEasing_;						//カメラ回転イージング
 	float currentCameraRotation_ = 0.0f;			//現在のカメラ回転角度
-	void CameraControl(char* keys, char* preKeys);	//カメラ操作
+	void CameraControl();							//カメラ操作
 	Camera2D::cameraInfo mainCameraInfo;
 	Camera2D::cameraInfo uiCameraInfo;
 	bool PlayerIsHitEnemy();						//プレイヤーが敵に当たったか

@@ -7,7 +7,6 @@ GamePlay::GamePlay() {
 }
 
 void GamePlay::Init() {
-	mainCameraInfo.centerpos = { 640.0f,360.0f };
 	//メインカメラの初期化
 	CameraManager::GetInstance()->GetMainCamera().InitCameraTransform(mainCameraInfo, 1280.0f, 720.0f);
 	
@@ -35,10 +34,12 @@ void GamePlay::Init() {
 	background_.Init();
 }
 
+
 void GamePlay::Update(char* keys, char* preKeys) {
 	//カメラ操作
-	CameraControl(keys, preKeys);
+	CameraControl();
 
+	//カメラ更新
 	CameraManager::GetInstance()->UpdateAll();
 	// カメライージング更新
 	cameraRotateEasing_.Update();
@@ -57,6 +58,7 @@ void GamePlay::Update(char* keys, char* preKeys) {
 
 }
 
+//描画処理
 void GamePlay::Draw() {
 	background_.Draw();
 	stage_.Draw();
@@ -72,12 +74,11 @@ void GamePlay::DebugText() {
 
 
 //カメラ操作
-void GamePlay::CameraControl(char* keys, char* preKeys) {
+void GamePlay::CameraControl() {
 
 	GameConfig* config = GameConfig::GetInstance();
-	if (keys[DIK_0] || preKeys[DIK_9]) {
-
-	}
+	
+	//ステージの状態が変化したらカメラ回転イージング開始
 	if (config->GetStageState() != config->GetPrevStageState() && !cameraRotateEasing_.isMove) {
 		config->SetIsRotate(true);
 
@@ -147,6 +148,7 @@ bool GamePlay::PlayerIsHitEnemy() {
 	return false;
 }
 
+//次のステージへ進むかの判定
 void GamePlay::NextStageCheck() {
 	if (enemy_.IsAllDead()) {
 		if (!isNextStageAdded) {

@@ -81,7 +81,7 @@ private:
 	int GetRandomInt(int min, int max);
 
 	//ステージごとの敵出現数
-	int stageEnemyCount[5] = { 10,20,30,40,50 };
+	int stageEnemyCount[5] = { 10,25,40,70,100 };
 
 };
 

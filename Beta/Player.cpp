@@ -113,32 +113,40 @@ void Player::InAirMove(char* keys, char* preKeys) {
 			if (direction != TOP) {
 				velocity = { 0.0f,0.0f };
 				gravity = { 0.0f,gravityStrength };
-				directionChangeLeft--;
-				direction = TOP;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = TOP;
+				}
 			}
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
 			if (direction != BOTTOM) {
 				velocity = { 0.0f,0.0f };
 				gravity = { 0.0f,-gravityStrength };
-				directionChangeLeft--;
-				direction = BOTTOM;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = BOTTOM;
+				}
 			}
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
 			if (direction != LEFT) {
 				velocity = { 0.0f,0.0f };
 				gravity = { -gravityStrength,0.0f };
-				directionChangeLeft--;
-				direction = LEFT;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = LEFT;
+				}
 			}
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
 			if (direction != RIGHT) {
 				velocity = { 0.0f,0.0f };
 				gravity = { gravityStrength,0.0f };
-				directionChangeLeft--;
-				direction = RIGHT;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = RIGHT;
+				}
 			}
 		}
 		break;
@@ -149,32 +157,40 @@ void Player::InAirMove(char* keys, char* preKeys) {
 			if (direction != BOTTOM) {
 				velocity = { 0.0f,0.0f };
 				gravity = { 0.0f,-gravityStrength };
-				directionChangeLeft--;
-				direction = BOTTOM;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = BOTTOM;
+				}
 			}
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
 			if (direction != TOP) {
 				velocity = { 0.0f,0.0f };
 				gravity = { 0.0f,gravityStrength };
-				directionChangeLeft--;
-				direction = TOP;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = TOP;
+				}
 			}
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
 			if (direction != RIGHT) {
 				velocity = { 0.0f,0.0f };
 				gravity = { gravityStrength,0.0f };
-				directionChangeLeft--;
-				direction = RIGHT;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = RIGHT;
+				}
 			}
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
 			if (direction != LEFT) {
 				velocity = { 0.0f,0.0f };
 				gravity = { -gravityStrength,0.0f };
-				directionChangeLeft--;
-				direction = LEFT;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = LEFT;
+				}
 			}
 		}
 		break;
@@ -184,32 +200,40 @@ void Player::InAirMove(char* keys, char* preKeys) {
 			if (direction != LEFT) {
 				velocity = { 0.0f,0.0f };
 				gravity = { -gravityStrength,0.0f };
-				directionChangeLeft--;
-				direction = LEFT;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = LEFT;
+				}
 			}
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
 			if (direction != RIGHT) {
 				velocity = { 0.0f,0.0f };
 				gravity = { gravityStrength,0.0f };
-				directionChangeLeft--;
-				direction = RIGHT;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = RIGHT;
+				}
 			}
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
 			if (direction != BOTTOM) {
 				velocity = { 0.0f,0.0f };
 				gravity = { 0.0f,-gravityStrength };
-				directionChangeLeft--;
-				direction = BOTTOM;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = BOTTOM;
+				}
 			}
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
 			if (direction != TOP) {
 				velocity = { 0.0f,0.0f };
 				gravity = { 0.0f,gravityStrength };
-				directionChangeLeft--;
-				direction = TOP;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = TOP;
+				}
 			}
 		}
 		break;
@@ -219,36 +243,45 @@ void Player::InAirMove(char* keys, char* preKeys) {
 			if (direction != RIGHT) {
 				velocity = { 0.0f,0.0f };
 				gravity = { gravityStrength,0.0f };
-				directionChangeLeft--;
-				direction = RIGHT;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = RIGHT;
+				}
 			}
 		}
 		if (keys[DIK_S] && !preKeys[DIK_S]) {
 			if (direction != LEFT) {
 				velocity = { 0.0f,0.0f };
 				gravity = { -gravityStrength,0.0f };
-				directionChangeLeft--;
-				direction = LEFT;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = LEFT;
+				}
 			}
 		}
 		if (keys[DIK_A] && !preKeys[DIK_A]) {
 			if (direction != TOP) {
 				velocity = { 0.0f,0.0f };
 				gravity = { 0.0f,gravityStrength };
-				directionChangeLeft--;
-				direction = TOP;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = TOP;
+				}
 			}
 		}
 		if (keys[DIK_D] && !preKeys[DIK_D]) {
 			if (direction != BOTTOM) {
 				velocity = { 0.0f,0.0f };
 				gravity = { 0.0f,-gravityStrength };
-				directionChangeLeft--;
-				direction = BOTTOM;
+				if (directionChangeLeft > 0) {
+					directionChangeLeft--;
+					direction = BOTTOM;
+				}
 			}
 		}
 		break;
 	}
+	
 	if (directionChangeLeft <= 0) {
 		canChangeGravity = false;
 	}

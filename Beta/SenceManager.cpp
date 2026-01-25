@@ -36,37 +36,32 @@ void SceneManager::StartTransition(SceneType to)
     phase_ = 0;
 
     // Phase 0: vertical close (1 -> 0) over 30 frames
-    vertEasing_.Init(1.0f, 0.0f, transitionTotalFrame_, EasingType::EASING_EASE_IN_OUT_QUAD);
+    vertEasing_.Init(1.0f, 0.0f, transitionTotalFrame_, EasingType::EASING_EASE_IN_BOUNCE);
     vertEasing_.Start();
 
     // Phase 1: horizontal close (1 -> 0) over 30 frames - will start later
-    horizEasing_.Init(1.0f, 0.0f, transitionTotalFrame_, EasingType::EASING_EASE_IN_OUT_QUAD);
-    // do NOT call horizEasing_.Start() here
+    horizonEasing_.Init(1.0f, 0.0f, transitionTotalFrame_, EasingType::EASING_EASE_IN_BOUNCE);
+    // do NOT call horizonEasing_.Start() here
+
+    pauseTimer_ = pauseDuration_;
 }
 
 void SceneManager::UpdateTransition()
 {
     switch (phase_)
     {
-    case 0: // vertical close (full screen -> horizontal line)
+    case 0: // vertical close
         vertEasing_.Update();
-        // while closing vertically, horizontal scale stays at 1
-        horizEasing_.easingRate = 1.0f;
-
+        horizonEasing_.easingRate = 1.0f;
         if (!vertEasing_.isMove) {
-            // start horizontal close
             phase_ = 1;
-            horizEasing_.Start();
+            horizonEasing_.Start();
         }
         break;
-
-    case 1: // horizontal close (line -> dot)
-        horizEasing_.Update();
-        // while closing horizontally, vertical is already 0
+    case 1: // horizontal close
+        horizonEasing_.Update();
         vertEasing_.easingRate = 0.0f;
-
-        if (!horizEasing_.isMove && !switchingDone_) {
-            // fully closed -> switch scenes here
+        if (!horizonEasing_.isMove && !switchingDone_) {
             switchingDone_ = true;
 
             delete currentScene_;
@@ -80,36 +75,33 @@ void SceneManager::UpdateTransition()
             case SceneType::Ranking: currentScene_ = new RankingScene(this); break;
             }
 
-            // prepare opening phases
+            // Begin black screen pause
             phase_ = 2;
-
-            // horizontal open: 0 -> 1
-            horizEasing_.Init(0.0f, 1.0f, transitionTotalFrame_, EasingType::EASING_EASE_IN_OUT_QUAD);
-            horizEasing_.Start();
-
-            // keep vertical at 0 at the beginning of the open
+            // pauseTimer_ already set; can reset if needed
+        }
+        break;
+    case 2: // *** black pause ***
+        if (--pauseTimer_ <= 0) {
+            // Prepare open
+            phase_ = 3;
+            horizonEasing_.Init(0.0f, 1.0f, transitionTotalFrame_, EasingType::EASING_EASE_IN_OUT_QUAD);
+            horizonEasing_.Start();
             vertEasing_.easingRate = 0.0f;
         }
         break;
-
-    case 2: // horizontal open (dot -> line)
-        horizEasing_.Update();
-        vertEasing_.easingRate = 0.0f; // still a line
-
-        if (!horizEasing_.isMove) {
-            // start vertical open
-            phase_ = 3;
+    case 3: // horizontal open (dot -> line)
+        horizonEasing_.Update();
+        vertEasing_.easingRate = 0.0f;
+        if (!horizonEasing_.isMove) {
+            phase_ = 4;
             vertEasing_.Init(0.0f, 1.0f, transitionTotalFrame_, EasingType::EASING_EASE_IN_OUT_QUAD);
             vertEasing_.Start();
         }
         break;
-
-    case 3: // vertical open (line -> full screen)
+    case 4: // vertical open (line -> full)
         vertEasing_.Update();
-        horizEasing_.easingRate = 1.0f; // full width
-
+        horizonEasing_.easingRate = 1.0f;
         if (!vertEasing_.isMove) {
-            // transition finished
             inTransition_ = false;
         }
         break;
@@ -163,51 +155,43 @@ void SceneManager::DrawTransitionOverlay()
     // Debug
     Novice::ScreenPrintf(0, 20, "Transition ON phase=%d", phase_);
     Novice::ScreenPrintf(0, 40, "w=%.2f h=%.2f",
-        horizEasing_.easingRate, vertEasing_.easingRate);
+        horizonEasing_.easingRate, vertEasing_.easingRate);
 
     const int screenW = 1280;
     const int screenH = 720;
     const int centerX = screenW / 2;
     const int centerY = screenH / 2;
 
-    unsigned int color = 0x222222FF; // or DARKGRAY while tuning
+    // Tweak for your mask/bar color during transition
+    unsigned int color = BLACK; // or use DARKGRAY for demo
 
-    // Copy scales locally and clamp
-    float wScale = horizEasing_.easingRate;
+    float wScale = horizonEasing_.easingRate;
     float hScale = vertEasing_.easingRate;
     if (wScale < 0.0f) wScale = 0.0f;
     if (wScale > 1.0f) wScale = 1.0f;
     if (hScale < 0.0f) hScale = 0.0f;
     if (hScale > 1.0f) hScale = 1.0f;
 
-    // Phase 0 & 3: vertical squash / expand (top/bottom only)
-    if (phase_ == 0 || phase_ == 3)
-    {
-        // hScale: 1.0 = full screen, 0.0 = horizontal line
+    if (phase_ == 0 || phase_ == 4) {
+        // --- vertical squash/expand ---
         int visibleH = static_cast<int>(screenH * hScale);
         int top = centerY - visibleH / 2;
         int bottom = centerY + visibleH / 2;
 
         if (visibleH <= 0) {
-            // Screen collapsed to a line: cover entire screen (just in case)
             Novice::DrawBox(0, 0, screenW, screenH, 0.0f, color, kFillModeSolid);
             return;
         }
-
-        // TOP bar
         if (top > 0) {
             Novice::DrawBox(0, 0, screenW, top, 0.0f, color, kFillModeSolid);
         }
-
-        // BOTTOM bar
         if (screenH - bottom > 0) {
             Novice::DrawBox(0, bottom, screenW, screenH - bottom, 0.0f, color, kFillModeSolid);
         }
     }
-    // Phase 1 & 2: horizontal pinch / expand (left/right only)
-    else if (phase_ == 1 || phase_ == 2)
-    {
-        int lineThickness = 4;
+    else if (phase_ == 1 || phase_ == 3) {
+        // --- horizontal pinch/expand ---
+        int lineThickness = 2;
         int top = centerY - lineThickness / 2;
         int bottom = centerY + lineThickness / 2;
 
@@ -227,42 +211,40 @@ void SceneManager::DrawTransitionOverlay()
         if (screenW - right > 0) {
             Novice::DrawBox(right, top, screenW - right, lineThickness, 0.0f, color, kFillModeSolid);
         }
-
-        // Black above and below
+        // Black above and below the beam
         Novice::DrawBox(0, 0, screenW, top, 0.0f, color, kFillModeSolid);
         Novice::DrawBox(0, bottom, screenW, screenH - bottom, 0.0f, color, kFillModeSolid);
 
-        // ---- circle flash ----
-        float t = 1.0f - wScale;          // 0..1 as bars close
+        // Optional: CRT circle flash/glow (see earlier steps in our chat)
+        float t = 1.0f - wScale;
         if (t < 0.0f) t = 0.0f;
         if (t > 1.0f) t = 1.0f;
 
-        float alphaT = t * (1.0f - t) * 4.0f;  // 0 -> 1 -> 0
-
-        // brightness levels example
+        float alphaT = t * (1.0f - t) * 4.0f;
         unsigned int circleColor;
         if (alphaT < 0.3f) {
-            circleColor = 0;            // invisible
+            circleColor = 0;
         }
         else if (alphaT < 0.6f) {
-            circleColor = 0xD3D3D3FF;    // medium
+            circleColor = 0xD3D3D3FF;
         }
         else {
-            circleColor = WHITE;        // bright flash
+            circleColor = WHITE;
         }
 
         if (circleColor != 0) {
             float minRadius = 10.0f;
-            float maxRadius = 80.0f;
+            float maxRadius = 60.0f;
             float radius = minRadius + (maxRadius - minRadius) * t;
 
-            Novice::DrawEllipse(
-                centerX, centerY,
+            Novice::DrawEllipse(centerX, centerY,
                 (int)radius, (int)radius,
-                0.0f,
-                circleColor,
-                kFillModeSolid
-            );
+                0.0f, circleColor, kFillModeSolid);
         }
+    }
+    else if (phase_ == 2) {
+        // --- PAUSE: Full black ---
+        Novice::DrawBox(0, 0, screenW, screenH, 0.0f, color, kFillModeSolid);
+        // Optionally you could draw a small dot or nothing
     }
 }

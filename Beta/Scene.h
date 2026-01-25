@@ -38,9 +38,13 @@ private:
 	SceneType nextType_ = SceneType::Title;
 
 	int phase_ = 0;
-	int transitionTotalFrame_ = 8;
+	int transitionTotalFrame_ = 10;
+
+	int pauseTimer_ = 0;
+	int pauseDuration_ = 60;
+
 	Easing vertEasing_;
-	Easing horizEasing_;
+	Easing horizonEasing_;
 
 	void StartTransition( SceneType to);
 	void UpdateTransition();

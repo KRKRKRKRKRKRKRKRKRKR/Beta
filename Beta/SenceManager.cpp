@@ -8,6 +8,7 @@ SceneManager::SceneManager()
 {
 	currentType_ = SceneType::Title;
 	currentScene_ = new TitleScene(this);
+    radialGlowTex_ = Novice::LoadTexture("./Textures/UI/glow.png"); 
 }
 
 SceneManager::~SceneManager()
@@ -215,31 +216,55 @@ void SceneManager::DrawTransitionOverlay()
         Novice::DrawBox(0, 0, screenW, top, 0.0f, color, kFillModeSolid);
         Novice::DrawBox(0, bottom, screenW, screenH - bottom, 0.0f, color, kFillModeSolid);
 
-        // Optional: CRT circle flash/glow (see earlier steps in our chat)
+        // ---- radial glow PNG using DrawQuad ----
         float t = 1.0f - wScale;
         if (t < 0.0f) t = 0.0f;
         if (t > 1.0f) t = 1.0f;
 
         float alphaT = t * (1.0f - t) * 4.0f;
-        unsigned int circleColor;
-        if (alphaT < 0.3f) {
-            circleColor = 0;
-        }
-        else if (alphaT < 0.6f) {
-            circleColor = 0xD3D3D3FF;
-        }
-        else {
-            circleColor = WHITE;
-        }
 
-        if (circleColor != 0) {
+        if (alphaT >= 0.3f && radialGlowTex_ != 0) {
+            // Calculate dynamic radius/scaling
             float minRadius = 10.0f;
             float maxRadius = 60.0f;
             float radius = minRadius + (maxRadius - minRadius) * t;
 
-            Novice::DrawEllipse(centerX, centerY,
-                (int)radius, (int)radius,
-                0.0f, circleColor, kFillModeSolid);
+            // PNG size and quad side length
+            float textureSize = 350.0f;
+            float scale = radius / (textureSize / 2.0f);
+
+            int quadW = static_cast<int>(textureSize * scale);
+            int quadH = static_cast<int>(textureSize * scale);
+
+            int centerXC = screenW / 2;
+            int centerYC = screenH / 2;
+
+            // Quad vertices
+            int x1 = centerXC - quadW / 2;
+            int y1 = centerYC - quadH / 2;
+            int x2 = centerXC + quadW / 2;
+            int y2 = centerYC - quadH / 2;
+            int x3 = centerXC - quadW / 2;
+            int y3 = centerYC + quadH / 2;
+            int x4 = centerXC + quadW / 2;
+            int y4 = centerYC + quadH / 2;
+
+            // Source image: use entire 350x350 region
+            int srcX = 0;
+            int srcY = 0;
+            int srcW = 350;
+            int srcH = 350;
+
+            Novice::DrawQuad(
+                x1, y1,
+                x2, y2,
+                x3, y3,
+                x4, y4,
+                srcX, srcY,
+                srcW, srcH,
+                radialGlowTex_,
+                WHITE  // Or other color, for full brightness
+            );
         }
     }
     else if (phase_ == 2) {

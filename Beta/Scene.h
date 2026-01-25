@@ -43,6 +43,8 @@ private:
 	int pauseTimer_ = 0;
 	int pauseDuration_ = 60;
 
+	int radialGlowTex_ = 0; 
+
 	Easing vertEasing_;
 	Easing horizonEasing_;
 

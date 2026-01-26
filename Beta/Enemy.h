@@ -19,6 +19,7 @@ public:
 		int count;							//カウント
 		Vector2 speed = {5.0f,5.0f};		//移動速度
 		bool isActive;						//生存フラグ
+
 	};
 
 	Enemy();
@@ -69,6 +70,7 @@ private:
 	//テクスチャ回転処理
 	void RotateTexture(float cameraRotate);
 
+	//全滅フラグ
 	bool allDead = false;
 
 	//全滅判定処理
@@ -76,12 +78,13 @@ private:
 
 	//リスポーン処理
 	void Respawn(const Transform2D& spawnStage,bool playerIsOnGround);
+	
 	//ランダム関数
 	float GetRandomFloat(float min, float max);
 	int GetRandomInt(int min, int max);
 
 	//ステージごとの敵出現数
-	int stageEnemyCount[5] = { 10,25,40,70,100 };
+	int stageEnemyCount[5] = { 10,15,30,40,50 };
 
 };
 

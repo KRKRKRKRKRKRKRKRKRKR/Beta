@@ -90,12 +90,13 @@ void Enemy::SpawnEnemy(const Transform2D& spawnStage) {
 
 //敵移動処理
 void Enemy::Move() {
+	float ts = GameConfig::GetInstance()->GetTimeScale(); 
 	for (EnemyData& enemy : enemies) {
 		if (!enemy.isActive) {
 			continue;
 		}
-		enemy.transform.worldPos.x += enemy.velocity.x * enemy.speed.x;
-		enemy.transform.worldPos.y += enemy.velocity.y * enemy.speed.y;
+		enemy.transform.worldPos.x += enemy.velocity.x * enemy.speed.x * ts;
+		enemy.transform.worldPos.y += enemy.velocity.y * enemy.speed.y * ts;
 	}
 }
 

@@ -30,11 +30,22 @@ public:
 	bool GetIsFinishedStage() const { return isFinishedStage; }
 	void SetIsFinishedStage(bool finished) { isFinishedStage = finished; }
 
+	int GetCurrentWave() const { return currentWave; }
+	int SetCurrentWave(int wave) { currentWave = wave; }
+
+	float GetTimeScale() const { return timeScale; }
+	void SetTimeScale(float scale) { timeScale = scale; }
+
 private:
 	GameConfig() = default;
 	StageState_ stageState = TOP;
 	StageState_ prevStageState = TOP;
-	bool isRotate = false;
-	int currentStage = 0;
-	bool isFinishedStage = false; //ステージクリアフラグ
+	bool isRotate = false;				//カメラ回転中かどうか
+	int currentStage = 0;				//現在のステージ数
+	bool isFinishedStage = false;		//ステージクリアフラグ
+	int currentWave = 0;				//現在のウェーブ数
+	
+	float timeScale = 1.0f;              //時間倍率
+	
+
 };

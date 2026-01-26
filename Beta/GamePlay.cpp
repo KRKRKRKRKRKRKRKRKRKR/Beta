@@ -36,6 +36,9 @@ void GamePlay::Init() {
 
 
 void GamePlay::Update(char* keys, char* preKeys) {
+
+	
+
 	//カメラ操作
 	CameraControl();
 
@@ -50,8 +53,20 @@ void GamePlay::Update(char* keys, char* preKeys) {
 	//敵更新
 	enemy_.Update(stage_.GetEnemySpawnRangeTransform(),currentCameraRotation_,player_.IsOnGround());
 
+
+	timeScaleEasing_.Update();
 	//プレイヤーが敵に当たったか
-	PlayerIsHitEnemy();
+	if(PlayerIsHitEnemy()){
+
+		timeScaleEasing_.Init(slowMotionTimeScale,normalTimeScale, slowMotionTime, EasingType::EASING_EASE_OUT_CUBIC);
+		timeScaleEasing_.Start();
+	}
+
+	if (timeScaleEasing_.isMove) {
+		GameConfig::GetInstance()->SetTimeScale(timeScaleEasing_.easingRate);
+	}else {
+		GameConfig::GetInstance()->SetTimeScale(normalTimeScale);
+	}
 
 	//次のステージへ進むかの判定
 	NextStageCheck();
@@ -159,4 +174,14 @@ void GamePlay::NextStageCheck() {
 		// 敵が復活したらフラグをリセット
 		isNextStageAdded = false;
 	}
+}
+
+void GamePlay::WaveCountCheck() {
+	GameConfig* config = GameConfig::GetInstance();
+	config->SetCurrentStage(0);
+}
+
+void GamePlay::SlowMotion() {
+	timeScaleEasing_.Init(slowMotionTimeScale, normalTimeScale, slowMotionTime, EasingType::EASING_EASE_OUT_CUBIC);
+	timeScaleEasing_.Start();
 }

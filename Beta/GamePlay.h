@@ -15,26 +15,33 @@
 class GamePlay {
 public:
 
-	GamePlay();										//コンストラクタ
-	void Init();									//初期化
-	void Update(char* keys, char* preKeys);			//更新	
-	void Draw();									//描画
+	GamePlay();											//コンストラクタ
+	void Init();										//初期化
+	void Update(char* keys, char* preKeys);				//更新	
+	void Draw();										//描画
 private:
 
-	Stage stage_;									//ステージ
-	Player player_;									//プレイヤー
-	Enemy enemy_;									//敵
-	UI ui_;											//UI
-	Background background_;							//背景
-	Collider collider_;								//当たり判定
-	Easing cameraRotateEasing_;						//カメラ回転イージング
-	float currentCameraRotation_ = 0.0f;			//現在のカメラ回転角度
-	void CameraControl();							//カメラ操作
+	Stage stage_;										//ステージ
+	Player player_;										//プレイヤー
+	Enemy enemy_;										//敵
+	UI ui_;												//UI
+	Background background_;								//背景
+	Collider collider_;									//当たり判定
+	Easing cameraRotateEasing_;							//カメラ回転イージング
+	float currentCameraRotation_ = 0.0f;				//現在のカメラ回転角度
+	void CameraControl();								//カメラ操作
 	Camera2D::cameraInfo mainCameraInfo;
 	Camera2D::cameraInfo uiCameraInfo;
-	bool PlayerIsHitEnemy();						//プレイヤーが敵に当たったか
-	void DebugText();								//デバッグテキスト表示
-	void NextStageCheck();							//次のステージへ進むかの判定
+	bool PlayerIsHitEnemy();							//プレイヤーが敵に当たったか
+	void DebugText();									//デバッグテキスト表示
+	void NextStageCheck();								//次のステージへ進むかの判定
 	bool isNextStageAdded = false;
+	void WaveCountCheck();								//ウェーブ数の判定
+		
+	void SlowMotion();									//スローモーション開始
+	Easing timeScaleEasing_;							//時間倍率イージング
+	float  normalTimeScale = 1.0f;						//通常時間倍率
+	float slowMotionTimeScale = normalTimeScale / 180;	//スローモーション時間倍率
 
+	int slowMotionTime = 150;							//スローモーション時間
 };

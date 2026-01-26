@@ -66,6 +66,8 @@ void Player::Move(char* keys, char* preKeys, const Transform2D& stage) {
 		return;
 	}
 
+	float ts = GameConfig::GetInstance()->GetTimeScale();
+
 	//回数回復処理
 	RecoverCount();
 
@@ -80,11 +82,11 @@ void Player::Move(char* keys, char* preKeys, const Transform2D& stage) {
 	}
 
 	//重力を加算
-	velocity.x += gravity.x;
-	velocity.y += gravity.y;
+	velocity.x += gravity.x * ts;
+	velocity.y += gravity.y * ts;
 
-	transform.worldPos.x += velocity.x;
-	transform.worldPos.y += velocity.y;
+	transform.worldPos.x += velocity.x * ts;
+	transform.worldPos.y += velocity.y * ts;
 
 
 	onGround = false;
@@ -101,7 +103,7 @@ void Player::OnGroundMove() {
 	canChangeGravity = true;
 	velocity = { 0.0f,0.0f };
 	gravity = { 0.0f,0.0f };
-	directionChangeLeft = maxDirectionChange;
+	directionChangeLeft = 2;
 }
 
 

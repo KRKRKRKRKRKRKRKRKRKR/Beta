@@ -38,6 +38,9 @@ TitleScene2::TitleScene2(SceneManager* manager)
 
 void TitleScene2::Update(char* keys, char* preKeys)
 {
+
+    bg_.Update();
+
     frameCount_++;
     hoverOffset_ = std::sinf(frameCount_ * 0.04f) * 13.0f;
 
@@ -72,38 +75,50 @@ void TitleScene2::Update(char* keys, char* preKeys)
 
         noiseTimer_++;
 
-        // Up/down input
-        if (keys[DIK_UP] && !preKeys[DIK_UP]) {
+        // Up/down input (arrow keys and W/S, just like your old TitleScene)
+        if ((keys[DIK_UP] && !preKeys[DIK_UP]) || (keys[DIK_W] && !preKeys[DIK_W])) {
             selectedIndex_ = (selectedIndex_ + 2) % 3;
             noiseTimer_ = 0;
         }
-        if (keys[DIK_DOWN] && !preKeys[DIK_DOWN]) {
+        if ((keys[DIK_DOWN] && !preKeys[DIK_DOWN]) || (keys[DIK_S] && !preKeys[DIK_S])) {
             selectedIndex_ = (selectedIndex_ + 1) % 3;
             noiseTimer_ = 0;
         }
+
+        // Enter key to select
+        if (!preKeys[DIK_RETURN] && keys[DIK_RETURN]) {
+            switch (selectedIndex_) {
+            case 0: // Play
+                sceneManager->ChangeScene(SceneType::Play);
+                break;
+            case 1: // Ranking
+                sceneManager->ChangeScene(SceneType::Ranking);
+                break;
+            case 2: // Credit
+                sceneManager->ChangeScene(SceneType::Credit);
+                break;
+            }
+        }
+
         // Easing toward currently selected menu text Y
         cursorCurrentY_ += ((float)menuTextY_[selectedIndex_] - cursorCurrentY_) * kCursorEasingSpeed;
 
         if (noiseTimer_ >= 60) noiseTimer_ = 0;
-
-        // Scene select (optional for now)
-        // if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {}
-
         break;
     }
 }
 
 void TitleScene2::Draw()
 {
-    // bg_.Draw();   // Optional background
+    bg_.Draw();
 
-    Novice::DrawSprite(
+   /* Novice::DrawSprite(
         0, 0,
         bgTexture_,
         1.0f, 1.0f,
         0.0f,
         WHITE
-    );
+    );*/
 
     logo_.DrawAt(logoCurrentX_, logo_.GetCenterY());
 

@@ -111,7 +111,7 @@ void SceneManager::UpdateTransition()
 
 void SceneManager::DrawCurrentScene()
 {
-    Novice::ScreenPrintf(0, 0, "inTransition=%d", inTransition_ ? 1 : 0);
+    //Novice::ScreenPrintf(0, 0, "inTransition=%d", inTransition_ ? 1 : 0);
 
     const int screenW = 1280;
     const int screenH = 720;
@@ -200,9 +200,9 @@ void SceneManager::UpdateCurrentScene(char* keys, char* preKeys)
 void SceneManager::DrawTransitionOverlay()
 {
     // Debug
-    Novice::ScreenPrintf(0, 20, "Transition ON phase=%d", phase_);
-    Novice::ScreenPrintf(0, 40, "w=%.2f h=%.2f",
-        horizonEasing_.easingRate, vertEasing_.easingRate);
+    //Novice::ScreenPrintf(0, 20, "Transition ON phase=%d", phase_);
+    //Novice::ScreenPrintf(0, 40, "w=%.2f h=%.2f",
+    //    horizonEasing_.easingRate, vertEasing_.easingRate);
 
     const int screenW = 1280;
     const int screenH = 720;

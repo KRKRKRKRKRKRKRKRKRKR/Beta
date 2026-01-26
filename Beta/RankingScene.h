@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Easing.h"
 
 class RankingScene : public Scene
 {
@@ -26,5 +27,12 @@ private:
 
 	int frameCount_ = 0;         // <- For hover animation
 	float hoverOffset_ = 0.0f;
+
+	// In CreditScene.h (private section)
+	float bgBreathPhase_ = 0.0f;
+	float bgBreathSpeed_ = 0.012f;  // Breathing speed (adjustable)
+
+	Easing breathEasing_;
+	bool isBreathForward_ = true; // to loop breathing
 };
 

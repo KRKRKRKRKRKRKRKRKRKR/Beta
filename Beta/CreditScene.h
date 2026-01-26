@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Easing.h"
 
 class CreditScene : public Scene
 {
@@ -30,6 +31,9 @@ private:
 	// In CreditScene.h (private section)
 	float bgBreathPhase_ = 0.0f;
 	float bgBreathSpeed_ = 0.012f;  // Breathing speed (adjustable)
+
+	Easing breathEasing_;
+	bool isBreathForward_ = true; // to loop breathing
 
 	//float bgColorPhase_ = 0.0f;
 	//float bgColorSpeed_ = 0.018f;   // Tint speed (adjustable)

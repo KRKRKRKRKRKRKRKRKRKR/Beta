@@ -26,4 +26,11 @@ private:
 
 	int frameCount_ = 0;         // <- For hover animation
 	float hoverOffset_ = 0.0f;
+
+	// In CreditScene.h (private section)
+	float bgBreathPhase_ = 0.0f;
+	float bgBreathSpeed_ = 0.012f;  // Breathing speed (adjustable)
+
+	//float bgColorPhase_ = 0.0f;
+	//float bgColorSpeed_ = 0.018f;   // Tint speed (adjustable)
 };

@@ -53,6 +53,9 @@
     <Filter Include="GamePlay\background">
       <UniqueIdentifier>{a2a7a003-31a1-4647-b964-6d43e39a17a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GamePlay\Score">
+      <UniqueIdentifier>{1bdfa022-3a81-4fd6-bea2-b92db806f998}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -204,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="Background.h">
       <Filter>GamePlay\background</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>GamePlay\Score</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

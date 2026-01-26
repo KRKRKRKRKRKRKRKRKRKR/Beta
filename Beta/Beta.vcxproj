@@ -209,6 +209,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="GamePlay.h" />
     <ClInclude Include="Object2D.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>

@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "UI.h"
 #include "Background.h"
+#include "Score.h"
 #include <vector>
 
 
@@ -20,7 +21,7 @@ public:
 	void Update(char* keys, char* preKeys);				//更新	
 	void Draw();										//描画
 private:
-
+	Score score_;										//スコア
 	Stage stage_;										//ステージ
 	Player player_;										//プレイヤー
 	Enemy enemy_;										//敵
@@ -37,11 +38,14 @@ private:
 	void NextStageCheck();								//次のステージへ進むかの判定
 	bool isNextStageAdded = false;
 	void WaveCountCheck();								//ウェーブ数の判定
-		
+	bool isWaveCountEnded = true;						//ウェーブ数が終了したか
+	bool prePlayerOnGround = false;
 	void SlowMotion();									//スローモーション開始
 	Easing timeScaleEasing_;							//時間倍率イージング
 	float  normalTimeScale = 1.0f;						//通常時間倍率
 	float slowMotionTimeScale = normalTimeScale / 180;	//スローモーション時間倍率
 
-	int slowMotionTime = 150;							//スローモーション時間
+	int slowMotionTime = 30;							//スローモーション時間
+
+	int combo = 0;										//コンボ数
 };

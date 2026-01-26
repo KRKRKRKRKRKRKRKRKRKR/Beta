@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include "Object2D.h"
 #include "CameraManager.h"
 #include "GameConfig.h"
@@ -34,7 +33,7 @@ private:
 	Vector2 velocity = {};										//速度
 	Direction direction;										//向いている方向
 	Direction preDirection;										//前の向いている方向
-	float gravityStrength = 10.5f;								//重力の強さ
+	float gravityStrength = 0.5f;								//重力の強さ
 	Vector2 gravity = { 0.0f,gravityStrength };					//重力
 	int directionChangeLeft = 2;								//方向変更残り回数
 	const int maxDirectionChange = 1;							//方向変更最大回数

@@ -2,6 +2,7 @@
 #include <cmath>
 #include "GamePlay.h"
 
+
 GamePlay::GamePlay() {
 	Init();
 }
@@ -50,14 +51,15 @@ void GamePlay::Update(char* keys, char* preKeys) {
 	//プレイヤー更新
 	player_.Update(keys, preKeys, stage_.GetTransform());
 
+	WaveCountCheck();
 	//敵更新
 	enemy_.Update(stage_.GetEnemySpawnRangeTransform(),currentCameraRotation_,player_.IsOnGround());
 
 
 	timeScaleEasing_.Update();
+
 	//プレイヤーが敵に当たったか
 	if(PlayerIsHitEnemy()){
-
 		timeScaleEasing_.Init(slowMotionTimeScale,normalTimeScale, slowMotionTime, EasingType::EASING_EASE_OUT_CUBIC);
 		timeScaleEasing_.Start();
 	}
@@ -67,6 +69,8 @@ void GamePlay::Update(char* keys, char* preKeys) {
 	}else {
 		GameConfig::GetInstance()->SetTimeScale(normalTimeScale);
 	}
+
+	GameConfig::GetInstance()->ClearWaveChangedFlag();
 
 	//次のステージへ進むかの判定
 	NextStageCheck();
@@ -85,6 +89,9 @@ void GamePlay::Draw() {
 
 void GamePlay::DebugText() {
 	Novice::ScreenPrintf(0, 0, "CurrentStage = %d",GameConfig::GetInstance()->GetCurrentStage());
+	Novice::ScreenPrintf(0, 100, "CurrentWave = %d", GameConfig::GetInstance()->GetCurrentWave());
+
+	Novice::ScreenPrintf(0, 200, "Score = %d", GameConfig::GetInstance()->GetScore());
 }
 
 
@@ -147,14 +154,22 @@ void GamePlay::CameraControl() {
 //プレイヤーが敵に当たったか
 bool GamePlay::PlayerIsHitEnemy() {
 	const Transform2D& playerTransform = player_.GetTransform();
-
-	// 非const参照で取得
 	std::vector<Enemy::EnemyData>& enemies = enemy_.GetEnemies();
+	GameConfig* config = GameConfig::GetInstance();
+
 	for (auto& enemy : enemies) {
 		if (!enemy.isActive) {
 			continue;
 		}
 		if (collider_.AABB(playerTransform, enemy.transform)) {
+
+			combo++;
+
+			float maxEnemies = static_cast<float>(enemy_.GetMaxEnemyCount());
+			int addScore = static_cast<int>(static_cast<float>(enemy.count) * static_cast<float>(combo) / maxEnemies);
+
+			config->AddScore(addScore);
+
 			enemy.isActive = false; // 生存フラグをfalse
 			player_.SetIsHitEnemy(true); // プレイヤーに当たりフラグを設定
 			return true; // 衝突が検出された場合、trueを返す
@@ -168,6 +183,8 @@ void GamePlay::NextStageCheck() {
 	if (enemy_.IsAllDead()) {
 		if (!isNextStageAdded) {
 			GameConfig::GetInstance()->NextStage();
+			GameConfig::GetInstance()->SetCurrentWave(-1); 
+
 			isNextStageAdded = true;
 		}
 	} else {
@@ -177,11 +194,22 @@ void GamePlay::NextStageCheck() {
 }
 
 void GamePlay::WaveCountCheck() {
+	bool currentOnGround = player_.IsOnGround();
 	GameConfig* config = GameConfig::GetInstance();
-	config->SetCurrentStage(0);
+
+	if (!prePlayerOnGround && currentOnGround) {
+		
+		int nextWave = config->GetCurrentWave() + 1;
+		config->SetCurrentWave(nextWave);
+	}
+
+	prePlayerOnGround = currentOnGround;
+
+
 }
 
 void GamePlay::SlowMotion() {
 	timeScaleEasing_.Init(slowMotionTimeScale, normalTimeScale, slowMotionTime, EasingType::EASING_EASE_OUT_CUBIC);
 	timeScaleEasing_.Start();
 }
+

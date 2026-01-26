@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Object2D.h"
 #include "CameraManager.h"
 #include <Novice.h>
@@ -13,8 +13,8 @@ public:
 private:
 
 	Transform2D scoreBoardTransform_;
-	Vector2 position_ = { 640.0f,690.0f };
-	float scoreBoardW = 552.0f;
-	float scoreBoardH = 62.0f;
+	Vector2 position_ = { 415.0f,690.0f };
+	float scoreBoardW = 150.0f;
+	float scoreBoardH = 46.0f;
 	int scoreBoardTextureHandle_ = Novice::LoadTexture("./Textures/UI/scoreboard.png");
 };

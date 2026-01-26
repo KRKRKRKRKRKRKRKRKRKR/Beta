@@ -47,7 +47,7 @@ private:
     // --- Select menu ---
     int selectedIndex_ = 0;
     float cursorCurrentY_;
-    const float kCursorEasingSpeed = 0.14f;
+    //const float kCursorEasingSpeed = 0.14f;
     int noiseTimer_ = 0;
 
     // Menu graphics
@@ -71,16 +71,18 @@ private:
     const int cursorXGap_ = 20; // Gap from left of menu
 
     // "Bar slot" positions for each menu, just like your friend
-    int barX_[3] = { 676, 676, 676 };   // ← use your BChoiceX_[i] values
+    int barX_[3] = { 676-56, 676-56, 676-56 };   // ← use your BChoiceX_[i] values
     int barY_[3] = { 156, 338, 524 };   // ← use your BChoiceY_[i] values
 
     // Cursor positions if you want them the same way (optional)
     // If you want cursor based on old code:
     int cursorX_ = 756 - 80;    // = AchoiceX_[0] - 80
-    int cursorYOffset_ = 30;    // Add to cursor Y in draw
+    int cursorYOffset_ = 30;
+   
+    const float kCursorEasingSpeed = 0.1f; // Try these, or tweak as needed  // Add to cursor Y in draw
 
     // Menu text positions (same as before)
-    int menuTextX_[3] = { 756, 756, 756 };  // = AchoiceX_[i] from friend
+    int menuTextX_[3] = { 700, 700, 700 };  // = AchoiceX_[i] from friend
     int menuTextY_[3] = { 126, 306, 490 };  // = AchoiceY_[i] from friend
 
     Easing logoSlideEasing_;

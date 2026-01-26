@@ -27,13 +27,13 @@ TitleScene2::TitleScene2(SceneManager* manager)
 
     // Initial values for select menu
     selectedIndex_ = 0;
-    cursorCurrentY_ = float(menuBaseY_);
+    cursorCurrentY_ = static_cast<float>(menuTextY_[0]);
     noiseTimer_ = 0;
 
     // Logo slide positions (change here to move the red line!)
     logoCurrentX_ = logo_.GetCenterX();
     logoStartX_ = logo_.GetCenterX();
-    logoTargetX_ = 360.0f; // aligns it to your left red line!
+    logoTargetX_ = 304.0f; // aligns it to your left red line!
 }
 
 void TitleScene2::Update(char* keys, char* preKeys)
@@ -81,8 +81,8 @@ void TitleScene2::Update(char* keys, char* preKeys)
             selectedIndex_ = (selectedIndex_ + 1) % 3;
             noiseTimer_ = 0;
         }
-        float targetY = float(menuBaseY_ + menuSpacingY_ * selectedIndex_);
-        cursorCurrentY_ += (targetY - cursorCurrentY_) * kCursorEasingSpeed;
+        // Easing toward currently selected menu text Y
+        cursorCurrentY_ += ((float)menuTextY_[selectedIndex_] - cursorCurrentY_) * kCursorEasingSpeed;
 
         if (noiseTimer_ >= 60) noiseTimer_ = 0;
 
@@ -120,9 +120,8 @@ void TitleScene2::Draw()
             barTex_[selectedIndex_], 1.0f, 1.0f, 0.0f, WHITE
         );
 
-        // Draw cursor for the selected item (optional: mimics friend's code)
         Novice::DrawSprite(
-            cursorX_,
+            cursorX_ - 56,
             static_cast<int>(cursorCurrentY_) + cursorYOffset_,
             cursorTex_, 1.0f, 1.0f, 0.0f, WHITE
         );

@@ -1,5 +1,5 @@
 #include <Novice.h>
-#include "GamePlay.h"
+#include "Scene.h" 
 
 const char kWindowTitle[] = "コジマ";
 
@@ -9,10 +9,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 	// キー入力結果を受け取る箱
-	char keys[256] = {0};
-	char preKeys[256] = {0};
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
 
-		GamePlay gamePlay;
+	SceneManager sceneManager;
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -28,12 +29,17 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		///
 		/// ↑更新処理ここまで
 		///
-		gamePlay.Update(keys,preKeys);
-		gamePlay.Draw();
+
+		sceneManager.UpdateCurrentScene(keys, preKeys);
 
 		///
 		/// ↓描画処理ここから
 		///
+
+		sceneManager.DrawCurrentScene();
+
+		//unsigned int color = WHITE; // semi-transparent red
+		//Novice::DrawBox(320, 180, 640, 360, 0.0f, color, kFillModeSolid);
 
 		///
 		/// ↑描画処理ここまで
@@ -42,8 +48,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		// フレームの終了
 		Novice::EndFrame();
 
-		// ESCキーが押されたらループを抜ける
-		if (preKeys[DIK_ESCAPE] == 0 && keys[DIK_ESCAPE] != 0) {
+		if (preKeys[DIK_ESCAPE] == 0 && keys[DIK_ESCAPE] != 0 &&
+			sceneManager.GetCurrentSceneType() == SceneType::Title) {
 			break;
 		}
 	}

@@ -86,6 +86,27 @@
     <ClCompile Include="Background.cpp">
       <Filter>GamePlay\background</Filter>
     </ClCompile>
+    <ClCompile Include="TitleBackground.cpp">
+      <Filter>GamePlay\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleLogo.cpp">
+      <Filter>GamePlay\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>GamePlay\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditScene.cpp">
+      <Filter>GamePlay\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>GamePlay\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="RankingScene.cpp">
+      <Filter>GamePlay\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SenceManager.cpp">
+      <Filter>GamePlay\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -204,6 +225,27 @@
     </ClInclude>
     <ClInclude Include="Background.h">
       <Filter>GamePlay\background</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleBackground.h">
+      <Filter>GamePlay\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleLogo.h">
+      <Filter>GamePlay\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>GamePlay\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditScene.h">
+      <Filter>GamePlay\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>GamePlay\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="RankingScene.h">
+      <Filter>GamePlay\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>GamePlay\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

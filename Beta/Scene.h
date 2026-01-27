@@ -41,7 +41,7 @@ private:
 	int transitionTotalFrame_ = 10;
 
 	int pauseTimer_ = 0;
-	int pauseDuration_ = 20;
+	int pauseDuration_ = 60;
 
 	int radialGlowTex_ = 0; 
 
@@ -51,6 +51,9 @@ private:
 	void StartTransition( SceneType to);
 	void UpdateTransition();
 	void DrawTransitionOverlay();
+
+	int bgTexture_ = 0;
+	int bgTexture2_ = 0;
 };
 
 

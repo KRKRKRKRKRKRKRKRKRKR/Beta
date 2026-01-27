@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "Easing.h"
+#include "TitleBackground.h"
 
 class RankingScene : public Scene
 {
@@ -11,6 +12,7 @@ public:
 
 private:
 	SceneManager* sceneManager;
+	TitleBackground bg_;
 
 	int bgTexture_;
 	int enterTexture_;           

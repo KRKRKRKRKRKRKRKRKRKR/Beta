@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "Easing.h"
+#include "TitleBackground.h"
 
 class CreditScene : public Scene
 {
@@ -11,6 +12,7 @@ public:
 
 private:
 	SceneManager* sceneManager;
+	TitleBackground bg_;
 
 	int bgTexture_;
 	int enterTexture_;           // <-- Add handle for enter image

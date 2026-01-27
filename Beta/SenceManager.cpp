@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "CreditScene.h"
 #include "RankingScene.h"
+#include <cmath>
 
 SceneManager::SceneManager()
 {
@@ -320,14 +321,14 @@ void SceneManager::DrawTransitionOverlay()
         Novice::DrawBox(0, 0, screenW, screenH, 0.0f, color, kFillModeSolid);
         // Optionally you could draw a small dot or nothing
 
-        Novice::DrawSprite(
-            centerX - (112 * 6),
-            centerY - (112 * 4),
-            bgTexture_,
-            6.0f, 4.0f,
-            0.0f,
-            WHITE
-        );
+        //Novice::DrawSprite(
+        //    centerX - (112 * 6),
+        //    centerY - (112 * 4),
+        //    bgTexture_,
+        //    6.0f, 4.0f,
+        //    0.0f,
+        //    WHITE
+        //);
 
         //Novice::DrawSprite(
         //    centerX - 193,
@@ -344,13 +345,18 @@ void SceneManager::DrawTransitionOverlay()
         //    100, 100, 0.0f, WHITE, kFillModeSolid
         //);
 
+        // Hover animation for logo (tiny logo at bottom right)
+        static int frameCountForOverlay = 0;
+        frameCountForOverlay++;
+        float hoverOffset = std::sinf(frameCountForOverlay * 0.04f) * 13.0f;
+
         Novice::DrawSprite(
             screenW - 150,
-            screenH - 130,
+            screenH - 140 + static_cast<int>(hoverOffset),
             bgTexture2_,
             1.0f, 1.0f,
             0.0f,
             WHITE
-		);
+        );
     }
 }

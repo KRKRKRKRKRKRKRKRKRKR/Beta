@@ -7,7 +7,7 @@
 #include "Easing.h"
 #include <vector>
 
-class Enemy{
+class Enemy {
 public:
 	//敵データ構造体
 	struct EnemyData {
@@ -17,19 +17,19 @@ public:
 		Vector2 velocity = {};				//速度
 		int moveType;						//移動軸 x = 0, y = 1
 		int count;							//カウント
-		Vector2 speed = {5.0f,5.0f};		//移動速度
+		Vector2 speed = { 5.0f,5.0f };		//移動速度
 		bool isActive;						//生存フラグ
 
 	};
 
 	Enemy();
-	Enemy(const Transform2D & spawnStage);
+	Enemy(const Transform2D& spawnStage);
 
 	//初期化
-	void Init(const Transform2D & spawnStage);
+	void Init(const Transform2D& spawnStage);
 
 	//更新
-	void Update(const Transform2D& spawnStage,float cameraRotate,bool playerIsOnGround);
+	void Update(const Transform2D& spawnStage, float cameraRotate, bool playerIsOnGround);
 
 	//描画
 	void Draw();
@@ -43,29 +43,57 @@ public:
 	//全滅判定取得
 	bool IsAllDead() const { return allDead; }
 
+	//STAGEの最大敵数取得
+	int GetMaxEnemyCount() const {
+		int stage = GameConfig::GetInstance()->GetCurrentStage();
+		if (stage > 4) {
+			stage = 4;
+		}
+		return stageEnemyCount[stage];
+	}
+
 private:
 	//敵データ配列
 	std::vector<EnemyData> enemies;
-	
+
 	Easing rotateEasing;				//テクスチャ回転イージング
 	float targetRotation = 0.0f;		//目標回転角度
 
 	//敵テクスチャ
-	int count1Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy1.png");
-	int count2Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy2.png");
-	int count3Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy3.png");
-	int count4Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy4.png");
-	int count5Texture = Novice::LoadTexture("./Textures/Characters/Enemy/enemy5.png");
-	int count6Texture = Novice::LoadTexture("./Textures/Characters/Enemy/40enemy6.png");
+	int countTexture40[6] = {
+		Novice::LoadTexture("./Textures/Characters/Enemy/40Enemy/40enemy1.png"),
+	Novice::LoadTexture("./Textures/Characters/Enemy/40Enemy/40enemy2.png"),
+	Novice::LoadTexture("./Textures/Characters/Enemy/40Enemy/40enemy3.png"),
+	Novice::LoadTexture("./Textures/Characters/Enemy/40Enemy/40enemy4.png"),
+	Novice::LoadTexture("./Textures/Characters/Enemy/40Enemy/40enemy5.png"),
+	Novice::LoadTexture("./Textures/Characters/Enemy/40Enemy/40enemy6.png")
+	};
 
+	int countTexture50[6] = {
+			Novice::LoadTexture("./Textures/Characters/Enemy/50Enemy/50enemy1.png"),
+			Novice::LoadTexture("./Textures/Characters/Enemy/50Enemy/50enemy2.png"),
+			Novice::LoadTexture("./Textures/Characters/Enemy/50Enemy/50enemy3.png"),
+			Novice::LoadTexture("./Textures/Characters/Enemy/50Enemy/50enemy4.png"),
+			Novice::LoadTexture("./Textures/Characters/Enemy/50Enemy/50enemy5.png"),
+			Novice::LoadTexture("./Textures/Characters/Enemy/50Enemy/50enemy6.png")
+	};
+
+	int textTexture[6] = {
+					Novice::LoadTexture("./Textures/Characters/Enemy/enemy1.png"),
+					Novice::LoadTexture("./Textures/Characters/Enemy/enemy2.png"),
+					Novice::LoadTexture("./Textures/Characters/Enemy/enemy3.png"),
+					Novice::LoadTexture("./Textures/Characters/Enemy/enemy4.png"),
+					Novice::LoadTexture("./Textures/Characters/Enemy/enemy5.png"),
+					Novice::LoadTexture("./Textures/Characters/Enemy/enemy6.png"),
+	};
 	//敵スポーン処理
-	void SpawnEnemy(const Transform2D & spawnStage);
-	
+	void SpawnEnemy(const Transform2D& spawnStage);
+
 	//敵移動処理
 	void Move();
-	
+
 	//ステージ内にクランプする処理
-	void ClampToStage(const Transform2D & spawnStage);
+	void ClampToStage(const Transform2D& spawnStage);
 
 	//テクスチャ回転処理
 	void RotateTexture(float cameraRotate);
@@ -77,14 +105,17 @@ private:
 	void CheckAllDead();
 
 	//リスポーン処理
-	void Respawn(const Transform2D& spawnStage,bool playerIsOnGround);
-	
+	void Respawn(const Transform2D& spawnStage, bool playerIsOnGround);
+
 	//ランダム関数
 	float GetRandomFloat(float min, float max);
 	int GetRandomInt(int min, int max);
 
 	//ステージごとの敵出現数
-	int stageEnemyCount[5] = { 10,15,30,40,50 };
+	int stageEnemyCount[5] = { 5,10,15,20,35 };
+
+	bool canCountdown = false;
+	int prevWaveCount = GameConfig::GetInstance()->GetCurrentWave();
 
 };
 

@@ -8,6 +8,7 @@ PlayScene::PlayScene(SceneManager* manager)
 void PlayScene::Update(char* keys, char* preKeys)
 {
 	gamePlay_.Update(keys, preKeys);
+	
 
 	if (!preKeys[DIK_RETURN] && keys[DIK_RETURN])
 	{
@@ -18,4 +19,5 @@ void PlayScene::Update(char* keys, char* preKeys)
 void PlayScene::Draw()
 {
 	gamePlay_.Draw();
+	
 }	

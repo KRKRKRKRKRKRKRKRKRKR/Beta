@@ -31,11 +31,38 @@ public:
 	void SetIsFinishedStage(bool finished) { isFinishedStage = finished; }
 
 	int GetCurrentWave() const { return currentWave; }
-	int SetCurrentWave(int wave) { currentWave = wave; }
 
 	float GetTimeScale() const { return timeScale; }
 	void SetTimeScale(float scale) { timeScale = scale; }
 
+	bool IsWaveChanged() const { return isWaveChanged; }
+
+	void SetCurrentWave(int wave) {
+		if (currentWave != wave) {
+			isWaveChanged = true;
+		}
+		currentWave = wave;
+	}
+
+	void ClearWaveChangedFlag() {
+		isWaveChanged = false;
+	}
+
+	void AddScore(int add) {
+		score += add;
+	}
+
+	int GetScore() const {
+		return score;
+	}
+
+	void SetMaxEnemiesStage(int maxEnemies) {
+		maxEnemiesStage = maxEnemies;
+	}
+
+	int GetMaxEnemiesStage() const {
+		return maxEnemiesStage;
+	}
 private:
 	GameConfig() = default;
 	StageState_ stageState = TOP;
@@ -44,8 +71,13 @@ private:
 	int currentStage = 0;				//現在のステージ数
 	bool isFinishedStage = false;		//ステージクリアフラグ
 	int currentWave = 0;				//現在のウェーブ数
-	
+	bool isWaveChanged = false;			//ウェーブが変更されたかどうか
+
 	float timeScale = 1.0f;              //時間倍率
 	
+	int score = 0;						//スコア
+
+	int maxEnemiesStage = 0;		   //ステージごとの最大敵数
+
 
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "GamePlay.h"
+#include "PlayBackground.h"
 
 class PlayScene : public Scene
 {
@@ -13,4 +14,5 @@ public:
 private:
 	SceneManager* sceneManager;
 	GamePlay gamePlay_;
+	
 };

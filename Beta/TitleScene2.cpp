@@ -89,7 +89,7 @@ void TitleScene2::Update(char* keys, char* preKeys)
         if (!preKeys[DIK_RETURN] && keys[DIK_RETURN]) {
             switch (selectedIndex_) {
             case 0: // Play
-                sceneManager->ChangeScene(SceneType::Play);
+                sceneManager->ChangeScene(SceneType::Tutorial);
                 break;
             case 1: // Ranking
                 sceneManager->ChangeScene(SceneType::Ranking);

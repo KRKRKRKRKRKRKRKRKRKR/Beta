@@ -2,6 +2,10 @@
 #include <cmath>
 #include "Player.h"
 
+#ifdef USE_IMGUI
+#include <imgui.h>
+#endif 
+
 Player::Player() {
 	Init();
 }
@@ -39,6 +43,9 @@ void Player::Init() {
 void Player::Update(char* keys, char* preKeys, const Transform2D& stage) {
 	Move(keys, preKeys, stage);
 	RotateTexture();
+	ImGui::Begin("Player Info");
+	ImGui::SliderFloat("Speed",&gravityStrength,0.5f,5.0f);
+	ImGui::End();
 }
 
 //描画処理

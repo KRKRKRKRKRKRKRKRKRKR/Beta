@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include "Object2D.h"
 #include "CameraManager.h"
 #include "GameConfig.h"

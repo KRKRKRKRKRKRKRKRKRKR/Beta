@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "CreditScene.h"
 #include "RankingScene.h"
+#include "TutorialScene.h"
 #include <cmath>
 
 SceneManager::SceneManager()
@@ -73,6 +74,7 @@ void SceneManager::UpdateTransition()
 
             switch (nextType_) {
             case SceneType::Title:   currentScene_ = new TitleScene2(this);   break;
+            case SceneType::Tutorial:currentScene_ = new TutorialScene(this); break;
             case SceneType::Play:    currentScene_ = new PlayScene(this);    break;
             case SceneType::Credit:  currentScene_ = new CreditScene(this);  break;
             case SceneType::Ranking: currentScene_ = new RankingScene(this); break;

@@ -7,6 +7,8 @@ GamePlay::GamePlay() {
 	Init();
 }
 
+
+
 void GamePlay::Init() {
 	//メインカメラの初期化
 	CameraManager::GetInstance()->GetMainCamera().InitCameraTransform(mainCameraInfo, 1280.0f, 720.0f);
@@ -18,7 +20,8 @@ void GamePlay::Init() {
 	//ステージステータスの初期化
 	GameConfig::GetInstance()->SetStageState(GameConfig::TOP);
 	GameConfig::GetInstance()->SetPrevStageState(GameConfig::TOP);
-
+	GameConfig::GetInstance()->SetCurrentStage(0);
+	GameConfig::GetInstance()->SetCurrentWave(0);
 	//カメラ回転角度の初期化
 	currentCameraRotation_ = 0.0f;
 	
@@ -33,6 +36,16 @@ void GamePlay::Init() {
 
 	//背景の初期化
 	background_.Init();
+
+	//コンボの初期化
+	ComboManager::GetInstance()->ResetCombo();
+
+	//スコアの初期化
+	Score::GetInstance()->ResetScore();
+
+	//ステージ回転の初期化
+	cameraRotateEasing_.Init(0.0f, 0.0f, 60, EasingType::EASING_EASE_IN_OUT_QUAD);
+	cameraRotateEasing_.easingRate = 0.0f;
 }
 
 

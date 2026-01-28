@@ -18,6 +18,12 @@
 class GamePlay {
 public:
 
+	enum GameState {
+		Play,
+		Ranking,
+	};
+
+	GameState state = Play;
 	GamePlay();											//コンストラクタ
 	void Init();										//初期化
 	void Update(char* keys, char* preKeys);				//更新	

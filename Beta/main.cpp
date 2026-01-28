@@ -1,7 +1,12 @@
-#include <Novice.h>
+﻿#include <Novice.h>
 #include "GamePlay.h"
 
 const char kWindowTitle[] = "コジマ";
+
+enum StageFlow {
+	StageFlow_Play,
+	StageFlow_Reset
+};
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
@@ -11,8 +16,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
 	char preKeys[256] = {0};
+	StageFlow stageFlow = StageFlow_Play;
 
 		GamePlay gamePlay;
+		gamePlay.Init();
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -22,15 +29,33 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		memcpy(preKeys, keys, 256);
 		Novice::GetHitKeyStateAll(keys);
 
+		switch (stageFlow) {
+
+		case StageFlow_Play:
+			gamePlay.Update(keys, preKeys);
+			gamePlay.Draw();
+
+			if (keys[DIK_R] && !preKeys[DIK_R]) {
+				stageFlow = StageFlow_Reset;
+			}
+
+			break;
+
+		case StageFlow_Reset:
+			if (keys[DIK_R] && !preKeys[DIK_R]) {
+				gamePlay.Init();
+				stageFlow = StageFlow_Play;
+			}
+			break;
+		}
+
 		///
 		/// ↓更新処理ここから
 		///
 		///
 		/// ↑更新処理ここまで
 		///
-		gamePlay.Update(keys,preKeys);
-		gamePlay.Draw();
-
+	
 		///
 		/// ↓描画処理ここから
 		///

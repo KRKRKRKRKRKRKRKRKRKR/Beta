@@ -29,6 +29,10 @@ void UI::Update(const Vector2& playerWorldPos) {
 		float angle = float(rand() % 360) * 3.1415926f / 180.0f;     // random angle 0~2pi
 		float distance = 52.0f + float(rand() % 36);                  // 52~87 px
 		comboPopupRand_ = { std::cosf(angle) * distance, std::sinf(angle) * distance };
+
+		// Set max rotation. Try 27–45 for a big swing, 10–20 for soft.
+		comboPopupRotationPower_ = (rand() % 2 == 0 ? 1.0f : -1.0f) * (18.0f + rand() % 13); // Randomly -18~+30 deg
+		comboPopupRotation_ = comboPopupRotationPower_; // Start at peak
 	}
 	lastComboDrawn_ = currentCombo;
 	Score::GetInstance()->Update();
@@ -110,10 +114,13 @@ void UI::ComboDraw(const Transform2D& /*playerPos*/, float cameraRotate) {
 			// t: 1 at start, 0 at end of effect
 			baseComboPos.x = comboPopupBase_.x + comboPopupRand_.x * (0.5f + 0.5f * t);
 			baseComboPos.y = comboPopupBase_.y + comboPopupRand_.y * (0.5f + 0.5f * t);
+			float rotationDecay = std::fmax(1.0f - comboShakeTime_ / 12.0f, 0.0f); // match to shake
+			comboPopupRotation_ = comboPopupRotationPower_ * rotationDecay;
 		}
 		else {
 			baseComboPos.x = comboPopupBase_.x + comboPopupRand_.x * 0.5f;
 			baseComboPos.y = comboPopupBase_.y + comboPopupRand_.y * 0.5f;
+			comboPopupRotation_ = 0.0f;
 		}
 
 		/*switch (GameConfig::GetInstance()->GetStageState()) {
@@ -166,6 +173,17 @@ void UI::ComboDraw(const Transform2D& /*playerPos*/, float cameraRotate) {
 			Transform2D comboTransform = comboTransform_;
 			comboTransform.worldPos = drawPos;
 			comboTransform.scale = { drawScale, drawScale };
+			
+			float rotation = comboPopupRotation_ - cameraRotate; // your normal effect
+			auto state = GameConfig::GetInstance()->GetStageState();
+			if (state == GameConfig::LEFT || state == GameConfig::RIGHT) {
+				rotation += 180.0f;
+			}
+			else
+			{
+				rotation = comboPopupRotation_ - cameraRotate;
+			}
+			comboTransform.rotation = rotation;
 
 			Quad screenPos = CameraManager::GetInstance()->GetMainCamera().WorldToScreen(comboTransform);
 

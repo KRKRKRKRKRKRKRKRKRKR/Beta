@@ -92,4 +92,7 @@ private:
 	// --- Add these: ---
 	Vector2 comboPopupBase_;      // The player position for this popup (set when combo increases)
 	Vector2 comboPopupRand_;      // The random position offset around the player for popup
+
+	float comboPopupRotation_ = 0.0f;  // The current (animated) rotation in degrees for combo popup
+	float comboPopupRotationPower_ = 0.0f; // How strong the rotation is at peak
 };

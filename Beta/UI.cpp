@@ -1,5 +1,7 @@
 ﻿#include "UI.h"
 #include <imgui.h>
+#include "Easing.h"
+#include <cmath>
 
 UI::UI() {
 	Init();
@@ -11,6 +13,18 @@ void UI::Init() {
 }
 
 void UI::Update() {
+	int currentCombo = ComboManager::GetInstance()->GetComboCount();
+
+	if (currentCombo > lastComboDrawn_) {
+		// Combo increased! Start pop+shake effect
+		comboScaleEasing_.Init(3.0f, 1.0f, 14, EasingType::EASING_EASE_OUT_BACK); // Tweak strength as desired
+		comboScaleEasing_.Start();
+
+		comboShakeTime_ = 0.0f;
+		comboShakePower_ = 16.0f; // set shake amplitude (pixels)
+		comboEffectActive_ = true;
+	}
+	lastComboDrawn_ = currentCombo;
 	Score::GetInstance()->Update();
 }
 
@@ -105,18 +119,47 @@ void UI::ComboDraw(const Transform2D& playerPos,float cameraRotate) {
 		
 		}
 
-		comboTransform_.worldPos = comboPos;
-		Quad screenPos = CameraManager::GetInstance()->GetMainCamera().WorldToScreen(comboTransform_);
+		//comboTransform_.worldPos = comboPos;
+		// ... inside ComboDraw()
+		if (combo->GetComboCount() >= 1 && combo->GetTimer() > 0) {
+			// === Animate scale and shake ===
+			float drawScale = 1.0f;
+			float shakeX = 0.0f, shakeY = 0.0f;
+			if (comboEffectActive_) {
+				comboScaleEasing_.Update();
+				drawScale = comboScaleEasing_.easingRate;
 
-		Novice::DrawQuad(
-			static_cast<int>(screenPos.v[0].x), static_cast<int>(screenPos.v[0].y),
-			static_cast<int>(screenPos.v[1].x), static_cast<int>(screenPos.v[1].y),
-			static_cast<int>(screenPos.v[2].x), static_cast<int>(screenPos.v[2].y),
-			static_cast<int>(screenPos.v[3].x), static_cast<int>(screenPos.v[3].y),
-			0, 0,
-			static_cast<int>(comboSize.x),
-			static_cast<int>(comboSize.y),
-			ComboTextureHandle_[combo->GetComboCount()], WHITE
-		);
+				comboShakeTime_ += 1.0f;
+				float shakeDecay = std::fmax(1.0f - comboShakeTime_ / 12.0f, 0.0f); // shake lasts 12 frames
+				shakeX = std::sinf(comboShakeTime_ * 0.38f) * comboShakePower_ * shakeDecay;
+				shakeY = std::cosf(comboShakeTime_ * 0.56f) * comboShakePower_ * shakeDecay;
+
+				if (shakeDecay <= 0.0f && !comboScaleEasing_.isMove) {
+					comboEffectActive_ = false; // Done animating
+				}
+			}
+
+			// === Calc position for popup+shake ===
+			Vector2 baseComboPos = comboPos; // This comes from your logic as before
+			Vector2 drawPos = { baseComboPos.x + shakeX, baseComboPos.y + shakeY };
+
+			// Center the scaling (your transform); adjust as needed
+			Transform2D comboTransform = comboTransform_;
+			comboTransform.worldPos = drawPos;
+			comboTransform.scale = { drawScale, drawScale };
+
+			Quad screenPos = CameraManager::GetInstance()->GetMainCamera().WorldToScreen(comboTransform);
+
+			Novice::DrawQuad(
+				static_cast<int>(screenPos.v[0].x), static_cast<int>(screenPos.v[0].y),
+				static_cast<int>(screenPos.v[1].x), static_cast<int>(screenPos.v[1].y),
+				static_cast<int>(screenPos.v[2].x), static_cast<int>(screenPos.v[2].y),
+				static_cast<int>(screenPos.v[3].x), static_cast<int>(screenPos.v[3].y),
+				0, 0,
+				static_cast<int>(comboSize.x),
+				static_cast<int>(comboSize.y),
+				ComboTextureHandle_[combo->GetComboCount()], WHITE
+			);
+		}
 	}
 }

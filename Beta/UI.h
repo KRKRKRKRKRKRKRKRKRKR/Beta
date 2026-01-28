@@ -5,6 +5,7 @@
 #include "ComboManager.h"
 #include <Novice.h>
 #include "GameConfig.h"
+#include "Easing.h"
 class UI {
 public:
 
@@ -75,4 +76,15 @@ private:
 	};
 	void ScoreBoardDraw();
 	void ComboDraw(const Transform2D & playerPos,float cameraRotate);
+
+	// == Add these members in UI class ==
+	float comboScale_ = 1.0f;                  // Current popup scale
+	
+	Easing comboScaleEasing_; 
+
+	float comboShakeTime_ = 0.0f;              // Shake animation time
+	float comboShakePower_ = 0.0f;             // Shake strength
+	bool  comboEffectActive_ = false;          // Is effect active?
+
+	int lastComboDrawn_ = 0;
 };

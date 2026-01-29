@@ -42,7 +42,7 @@ private:
 
     /// Animation
     int frameCount_ = 0;
-    int introDuration_ = 100; // adjustable intro scale+rotation frames
+    int introDuration_ = 120; // adjustable intro scale+rotation frames
     float rotateSpeed_ = 10.0f; // degrees per frame
     float rotation_ = 0.0f;
 

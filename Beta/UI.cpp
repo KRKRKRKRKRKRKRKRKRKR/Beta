@@ -15,6 +15,30 @@ void UI::Init() {
 void UI::Update(const Vector2& playerWorldPos) {
 	int currentCombo = ComboManager::GetInstance()->GetComboCount();
 
+	int displayScore = Score::GetInstance()->GetDisplayScore();
+
+	// --- Detect changed digits and trigger pop per changed digit ---
+	int prev = lastDisplayedScore_;
+	int curr = displayScore;
+
+	for (int i = 0; i < 7; ++i) {
+		int prevDigit = prev % 10;
+		int currDigit = curr % 10;
+		if (prevDigit != currDigit) {
+			// Digit changed: kick popup effect for this digit!
+			scoreDigitEasing_[i].Init(1.2f, 1.0f, 20, EasingType::EASING_EASE_OUT_BACK);
+			scoreDigitEasing_[i].Start();
+		}
+		prev /= 10;
+		curr /= 10;
+	}
+
+	lastDisplayedScore_ = displayScore;
+
+	// Tick easings
+	for (int i = 0; i < 7; ++i)
+		scoreDigitEasing_[i].Update();
+
 	if (currentCombo > lastComboDrawn_) {
 		// Combo increased! Start pop+shake effect
 		comboScaleEasing_.Init(5.0f, 1.0f, 25, EasingType::EASING_EASE_OUT_BACK); // Tweak strength as desired
@@ -60,10 +84,10 @@ void UI::Draw(const Transform2D& playerPos,float cameraRotate) {
 
 void UI::ScoreBoardDraw() {
 	ImGui::DragFloat2("Numberpos", &numberPos.x, 0.1f);
-	int currentScore = Score::GetInstance()->GetDisplayScore();
-
+  
 	const int kMaxDigits = 7;
 
+	//int currentScore = Score::GetInstance()->GetDisplayScore();
 
 	// ★ここ！ 数字の「幅」に「どれくらい隙間を空けるか」を足す
 	const float kSpacing = 4.0f; // 4ピクセル分空ける（お好みで調整）
@@ -71,18 +95,20 @@ void UI::ScoreBoardDraw() {
 
 
 	// basePos も間隔を含めた全体の幅で再計算
-	Vector2 basePos = { numberPos.x + (kOffsetPerDigit * (kMaxDigits - 1) / 2.0f),numberPos.y };
-	for (int i = 0; i < kMaxDigits; i++) {
-		int digit = currentScore % 10;
-		currentScore /= 10;
+	Vector2 basePos = { numberPos.x + (kOffsetPerDigit * (kMaxDigits - 1) / 2.0f), numberPos.y };
+	int score = Score::GetInstance()->GetDisplayScore();
 
-		// ★計算で kDigitWidth の代わりに kOffsetPerDigit を使う
+	for (int i = 0; i < kMaxDigits; i++) {
+		int digit = score % 10;
+		score /= 10;
+
 		Vector2 digitPos = { basePos.x - (i * kOffsetPerDigit), basePos.y };
 		Transform2D digitTransform;
 		digitTransform.Init(digitPos, numberSize.x, numberSize.y);
 
-		// ④ 描画（Novice::DrawQuad を使う場合）
-		// local座標をworldPos（digitPos）を基準に変換して描画
+		// --- get popup scale for this digit ---
+		float digitScale = scoreDigitEasing_[i].isMove ? scoreDigitEasing_[i].easingRate : 1.0f;
+		digitTransform.scale = { digitScale, digitScale };
 
 		Quad screen = CameraManager::GetInstance()->GetUICamera().WorldToScreen(digitTransform);
 
@@ -92,8 +118,7 @@ void UI::ScoreBoardDraw() {
 			static_cast<int>(screen.v[2].x + 75), static_cast<int>(screen.v[2].y),
 			static_cast<int>(screen.v[3].x + 75), static_cast<int>(screen.v[3].y),
 			0, 0, static_cast<int>(numberSize.x), static_cast<int>(numberSize.y),
-			numbersTextureHandle[digit], // 抽出した数字のハンドル
-			0xFFFFFFFF
+			numbersTextureHandle[digit], 0xFFFFFFFF
 		);
 	}
 }

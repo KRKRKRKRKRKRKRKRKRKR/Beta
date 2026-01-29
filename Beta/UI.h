@@ -7,6 +7,8 @@
 #include "GameConfig.h"
 #include "Easing.h"
 #include "Player.h"
+#include <array>
+
 class UI {
 public:
 
@@ -95,4 +97,9 @@ private:
 
 	float comboPopupRotation_ = 0.0f;  // The current (animated) rotation in degrees for combo popup
 	float comboPopupRotationPower_ = 0.0f; // How strong the rotation is at peak
+
+	// For max 7 digits, tracks scale of each digit popup
+	std::array<float, 7> scoreDigitScales_{};
+	std::array<Easing, 7> scoreDigitEasing_{};
+	int lastDisplayedScore_ = 0; // For change detection
 };

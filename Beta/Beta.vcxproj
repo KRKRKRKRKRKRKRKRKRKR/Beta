@@ -173,6 +173,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="RankingScene.cpp" />
+    <ClCompile Include="ScoreScene.cpp" />
     <ClCompile Include="SenceManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Stage.cpp" />
@@ -229,6 +230,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="RankingScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="ScoreScene.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="TitleBackground.h" />

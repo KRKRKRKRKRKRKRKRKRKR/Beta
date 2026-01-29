@@ -7,7 +7,8 @@ enum class SceneType
 	Play,
 	Credit,
 	Ranking,
-	Tutorial
+	Tutorial,
+	Score
 };
 
 class Scene

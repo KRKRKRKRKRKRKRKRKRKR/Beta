@@ -12,7 +12,7 @@ void PlayScene::Update(char* keys, char* preKeys)
 
 	if (gamePlay_.GetPlayerHP() <= 0)
 	{
-		sceneManager->ChangeScene(SceneType::Ranking);
+		sceneManager->ChangeScene(SceneType::Score);
 	}
 }
 

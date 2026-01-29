@@ -52,7 +52,43 @@ void GamePlay::Update(char* keys, char* preKeys) {
 		Score::GetInstance()->ResetScore();
 	}
 
+	// At the start or before drawing
+	if (cameraShakeDuration_ > 0.0f) {
+		cameraShakeTime_ += 1.0f;
+		float decay = 1.0f - (cameraShakeTime_ / cameraShakeDuration_);
+		if (decay < 0.0f) decay = 0.0f;
+		// Vary direction with sine/cos and a little randomness
+		cameraShakeOffset_.x = (std::sinf(cameraShakeTime_ * 0.7f) + (rand() % 100 - 50) / 50.0f * 0.7f) * cameraShakePower_ * decay;
+		cameraShakeOffset_.y = (std::cosf(cameraShakeTime_ * 1.2f) + (rand() % 100 - 50) / 50.0f * 0.7f) * cameraShakePower_ * decay;
+		if (cameraShakeTime_ >= cameraShakeDuration_) {
+			cameraShakeOffset_ = { 0.0f, 0.0f };
+			cameraShakeDuration_ = 0.0f;
+		}
+	}
+	else {
+		cameraShakeOffset_ = { 0.0f, 0.0f };
+	}
+	// At the start or before drawing
+	bool isPlayerHit = PlayerIsHitEnemy();
+	if (isPlayerHit && !wasPlayerHitInLastFrame_) {
+		// Trigger shake!
+		cameraShakeDuration_ = 10.0f;
+		cameraShakePower_ = 6.0f;
+		cameraShakeTime_ = 0.0f;
+
+		// Trigger slow motion!
+		timeScaleEasing_.Init(slowMotionTimeScale, normalTimeScale, slowMotionTime, EasingType::EASING_EASE_OUT_CUBIC);
+		timeScaleEasing_.Start();
+
+		printf("SHAKE TRIGGERED!\n");
+	}
+	wasPlayerHitInLastFrame_ = isPlayerHit;
+
 	bg_.Update();
+
+	CameraManager::GetInstance()->GetMainCamera().SetCameraPosition(cameraBasePos_);
+
+	CameraManager::GetInstance()->GetMainCamera().MoveCamera(cameraShakeOffset_);
 
 	//カメラ操作
 	CameraControl();
@@ -72,11 +108,11 @@ void GamePlay::Update(char* keys, char* preKeys) {
 
 	timeScaleEasing_.Update();
 
-	//プレイヤーが敵に当たったか
-	if(PlayerIsHitEnemy()){
-		timeScaleEasing_.Init(slowMotionTimeScale,normalTimeScale, slowMotionTime, EasingType::EASING_EASE_OUT_CUBIC);
-		timeScaleEasing_.Start();
-	}
+	////プレイヤーが敵に当たったか
+	//if(PlayerIsHitEnemy()){
+	//	timeScaleEasing_.Init(slowMotionTimeScale,normalTimeScale, slowMotionTime, EasingType::EASING_EASE_OUT_CUBIC);
+	//	timeScaleEasing_.Start();
+	//}
 
 	if (timeScaleEasing_.isMove) {
 		GameConfig::GetInstance()->SetTimeScale(timeScaleEasing_.easingRate);
@@ -103,6 +139,7 @@ void GamePlay::Draw() {
 	enemy_.Draw();
 	ui_.Draw(player_.GetTransform(),currentCameraRotation_);
 	DebugText();
+
 }
 
 void GamePlay::DebugText() {
@@ -114,7 +151,6 @@ void GamePlay::DebugText() {
 	ImGui::Text("Combo = % d",ComboManager::GetInstance()->GetComboCount());
 	ImGui::Text("StageState = %d", GameConfig::GetInstance()->GetStageState());
 	ImGui::End();
-	
 
 }
 
@@ -177,6 +213,7 @@ void GamePlay::CameraControl() {
 
 //プレイヤーが敵に当たったか
 bool GamePlay::PlayerIsHitEnemy() {
+
 	const Transform2D& playerTransform = player_.GetTransform();
 	std::vector<Enemy::EnemyData>& enemies = enemy_.GetEnemies();
 

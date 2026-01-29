@@ -55,4 +55,14 @@ private:
 	int slowMotionTime = 30;							//スローモーション時間
 
 	int combo = 0;										//コンボ数
+
+	// In GamePlay.h (private section)
+	float cameraShakeTime_ = 0.0f;
+	float cameraShakeDuration_ = 0.0f;
+	float cameraShakePower_ = 0.0f;
+	Vector2 cameraShakeOffset_ = { 0.0f, 0.0f };
+	Vector2 cameraBasePos_ = { 640.0f, 360.0f };
+
+	bool isPlayerWasHit_ = false;
+	bool wasPlayerHitInLastFrame_ = false;
 };

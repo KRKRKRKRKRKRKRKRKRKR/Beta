@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Easing.h"
 #include "TitleBackground.h"
+#include "Score.h"
 
 class TutorialScene : public Scene
 {

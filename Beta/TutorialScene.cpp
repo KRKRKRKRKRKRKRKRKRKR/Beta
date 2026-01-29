@@ -12,10 +12,12 @@ TutorialScene::TutorialScene(SceneManager* manager)
     breathEasing_.Init(1.0f, 1.012f, 120, EasingType::EASING_EASE_IN_OUT_SINE); // scale: 1.0 <-> 1.012, 120 frames per cycle
     breathEasing_.Start();
     isBreathForward_ = true;
+    Score::GetInstance()->ResetScore();
 }
 
 void TutorialScene::Update(char* keys, char* preKeys)
 {
+    Score::GetInstance()->ResetScore();
 
     bg_.Update();
 

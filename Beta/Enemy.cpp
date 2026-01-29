@@ -99,6 +99,10 @@ void Enemy::SpawnEnemy(const Transform2D& spawnStage) {
 void Enemy::Move() {
 	GameConfig* config = GameConfig::GetInstance();
 	float ts = GameConfig::GetInstance()->GetTimeScale();
+	
+	
+	//もしも、ウェーブが変更されていたら
+
 	bool waveChanged = config->IsWaveChanged();
 
 	for (EnemyData& enemy : enemies) {
@@ -107,17 +111,16 @@ void Enemy::Move() {
 		}
 		
 		if (waveChanged) {
-			if (enemy.count > 0) {
 				enemy.count--;
-			}
+				if (enemy.count < 0) {
+					enemy.isActive = false;
+				}
 		}
 
 		enemy.transform.worldPos.x += enemy.velocity.x * enemy.speed.x * ts;
 		enemy.transform.worldPos.y += enemy.velocity.y * enemy.speed.y * ts;
 		
 	}
-	
-
 }
 
 //ステージ内にクランプする処理

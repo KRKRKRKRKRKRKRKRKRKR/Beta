@@ -62,9 +62,10 @@ void UI::Update(const Vector2& playerWorldPos) {
 	Score::GetInstance()->Update();
 }
 
-void UI::Draw(const Transform2D& playerPos,float cameraRotate) {
+void UI::Draw(const Transform2D& playerPos,float cameraRotate, int hp) {
 	ScoreBoardDraw();
 	ComboDraw(playerPos,cameraRotate);
+	DrawHPBar(hp);
 
 	ImGui::DragFloat2("position", &scoreTextPos.x, 0.1f);
 	scoreBoardTransform_.Init(scoreTextPos, scoreBoardW, scoreBoardH);
@@ -222,6 +223,32 @@ void UI::ComboDraw(const Transform2D& /*playerPos*/, float cameraRotate) {
 				static_cast<int>(comboSize.y),
 				ComboTextureHandle_[combo->GetComboCount()], WHITE
 			);
+		}
+	}
+}
+
+void UI::DrawHPBar(int hp) {
+	// Draw the base bar (always visible)
+	Novice::DrawSprite(
+		hpBarPosX_ - hpBarWidth_ / 2,
+		hpBarPosY_ + 5,
+		lifeBarTexture_,
+		1.0f, 1.0f,
+		0.0f,
+		WHITE);
+
+	// Draw up to hp filled icons
+	int iconsStartX = hpBarPosX_ - ((lifeIconWidth_ + lifeIconSpacing_) * kMaxHP - lifeIconSpacing_) / 2;
+
+	for (int i = 0; i < kMaxHP; ++i) {
+		if (i < hp) {
+			Novice::DrawSprite(
+				iconsStartX + i * (lifeIconWidth_ + lifeIconSpacing_),
+				lifeIconY_ + 3,
+				lifeIconTexture_,
+				1.0f, 1.0f,
+				0.0f,
+				WHITE);
 		}
 	}
 }

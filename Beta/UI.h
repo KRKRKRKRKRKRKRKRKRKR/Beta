@@ -15,7 +15,7 @@ public:
 	UI();
 	void Init();
 	void Update(const Vector2& playerWorldPos);
-	void Draw(const Transform2D & playerPos,float cameraRotate);
+	void Draw(const Transform2D & playerPos,float cameraRotate,int hp);
 
 private:
 
@@ -77,8 +77,26 @@ private:
 		Novice::LoadTexture("./Textures/UI/Combo/Combo29.png"),
 		Novice::LoadTexture("./Textures/UI/Combo/Combo30.png")
 	};
+
 	void ScoreBoardDraw();
 	void ComboDraw(const Transform2D & playerPos,float cameraRotate);
+	// --- HP Bar (Life Bar) ---
+	int lifeBarTexture_ = Novice::LoadTexture("./Textures/UI/lifebar.png");
+	int lifeIconTexture_ = Novice::LoadTexture("./Textures/UI/life.png");
+
+	// Bar and icon layout settings
+	static constexpr int kMaxHP = 5;
+	static constexpr int hpBarWidth_ = 440;
+	static constexpr int hpBarHeight_ = 12;
+	static constexpr int hpBarPosX_ = 640;  // Center of screen
+	static constexpr int hpBarPosY_ = 704;  // Near bottom
+	static constexpr int lifeIconWidth_ = 52;
+	static constexpr int lifeIconHeight_ = 48;
+	static constexpr int lifeIconSpacing_ = 12;
+	static constexpr int lifeIconFirstX_ = hpBarPosX_ - (lifeIconWidth_ + lifeIconSpacing_) * (kMaxHP / 2);
+	static constexpr int lifeIconY_ = hpBarPosY_ - 46; // Slightly above the bar
+
+	void DrawHPBar(int hp); // Declare draw method
 
 	// == Add these members in UI class ==
 	float comboScale_ = 1.0f;                  // Current popup scale

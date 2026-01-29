@@ -14,7 +14,7 @@ public:
 
 	UI();
 	void Init();
-	void Update(const Vector2& playerWorldPos);
+	void Update(const Vector2& playerWorldPos, int hp);
 	void Draw(const Transform2D & playerPos,float cameraRotate,int hp);
 
 private:
@@ -95,6 +95,18 @@ private:
 	static constexpr int lifeIconSpacing_ = 12;
 	static constexpr int lifeIconFirstX_ = hpBarPosX_ - (lifeIconWidth_ + lifeIconSpacing_) * (kMaxHP / 2);
 	static constexpr int lifeIconY_ = hpBarPosY_ - 46; // Slightly above the bar
+
+	// For HP icon pop/scale effect (for each life)
+	float lifePopScale_[kMaxHP]{ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+	Easing lifePopEasing_[kMaxHP];
+
+	// For HP icon shake effect (for each life)
+	float lifeShakeTime_[kMaxHP]{};
+	float lifeShakePower_[kMaxHP]{};
+	bool  lifeShakeActive_[kMaxHP]{};
+
+	// Track previous HP for edge detection
+	int lastLifeCount_ = kMaxHP;
 
 	void DrawHPBar(int hp); // Declare draw method
 

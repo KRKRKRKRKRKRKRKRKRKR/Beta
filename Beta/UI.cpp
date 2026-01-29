@@ -10,12 +10,47 @@ UI::UI() {
 void UI::Init() {
 	scoreBoardTransform_.Init(scoreTextPos, scoreBoardW, scoreBoardH);
 	comboTransform_.Init({ 0.0f,0.0f }, comboSize.x, comboSize.y);
+	lastLifeCount_ = kMaxHP;
+	for (int i = 0; i < kMaxHP; ++i) {
+		lifePopScale_[i] = 1.0f;
+		lifePopEasing_[i].Init(1.0f, 1.0f, 1, EasingType::EASING_EASE_OUT_BACK);
+		lifeShakeActive_[i] = false;
+		lifeShakeTime_[i] = 0.0f;
+	}
 }
 
-void UI::Update(const Vector2& playerWorldPos) {
+void UI::Update(const Vector2& playerWorldPos, int hp) {
 	int currentCombo = ComboManager::GetInstance()->GetComboCount();
 
 	int displayScore = Score::GetInstance()->GetDisplayScore();
+
+	if (hp < lastLifeCount_) {
+		// For each lost life, trigger its effect (in case HP drops by more than 1)
+		for (int i = hp; i < lastLifeCount_; ++i) {
+			lifePopEasing_[i].Init(1.5f, 0.0f, 20, EasingType::EASING_EASE_OUT_BACK);
+			lifePopEasing_[i].Start();
+			lifeShakeTime_[i] = 0.0f;
+			lifeShakePower_[i] = 20.0f; // your shake strength
+			lifeShakeActive_[i] = true;
+		}
+	}
+	lastLifeCount_ = hp;
+
+	// Per-icon (lost) pop/scale update
+	for (int i = 0; i < kMaxHP; ++i) {
+		if (lifePopEasing_[i].isMove)
+			lifePopEasing_[i].Update();
+		else if (lifePopScale_[i] != 0.0f)
+			lifePopScale_[i] = 0.0f;
+		// Update shake
+		if (lifeShakeActive_[i]) {
+			lifeShakeTime_[i] += 1.0f;
+			if (lifeShakeTime_[i] > 15.0f) { // shake lasts 15 frames
+				lifeShakeActive_[i] = false;
+				lifeShakeTime_[i] = 0.0f;
+			}
+		}
+	}
 
 	// --- Detect changed digits and trigger pop per changed digit ---
 	int prev = lastDisplayedScore_;
@@ -228,27 +263,38 @@ void UI::ComboDraw(const Transform2D& /*playerPos*/, float cameraRotate) {
 }
 
 void UI::DrawHPBar(int hp) {
-	// Draw the base bar (always visible)
-	Novice::DrawSprite(
-		hpBarPosX_ - hpBarWidth_ / 2,
-		hpBarPosY_ + 5,
-		lifeBarTexture_,
-		1.0f, 1.0f,
-		0.0f,
-		WHITE);
-
-	// Draw up to hp filled icons
+	Novice::DrawSprite(hpBarPosX_ - hpBarWidth_ / 2, hpBarPosY_ + 5, lifeBarTexture_, 1.0f, 1.0f, 0.0f, WHITE);
 	int iconsStartX = hpBarPosX_ - ((lifeIconWidth_ + lifeIconSpacing_) * kMaxHP - lifeIconSpacing_) / 2;
 
 	for (int i = 0; i < kMaxHP; ++i) {
+		float scale = 1.0f;
+		float shakeOffset = 0.0f;
+		// Animate lost life ONLY when disappearing
+		if (i >= hp && lifePopEasing_[i].isMove) {
+			scale = lifePopEasing_[i].easingRate;
+			if (lifeShakeActive_[i]) {
+				float decay = 1.0f - (lifeShakeTime_[i] / 15.0f);
+				shakeOffset = std::sinf(lifeShakeTime_[i] * 0.6f + i) * lifeShakePower_[i] * decay;
+			}
+		}
+		// Only draw up to life you have
 		if (i < hp) {
 			Novice::DrawSprite(
 				iconsStartX + i * (lifeIconWidth_ + lifeIconSpacing_),
 				lifeIconY_ + 3,
 				lifeIconTexture_,
-				1.0f, 1.0f,
-				0.0f,
+				scale, scale, 0.0f,
 				WHITE);
+		}
+		// Optional/advanced: show fading/disappearing icon as it pops away when lost
+		else if (lifePopEasing_[i].isMove) {
+			Novice::DrawSprite(
+				(int)(iconsStartX + i * (lifeIconWidth_ + lifeIconSpacing_) + shakeOffset),
+				(int)(lifeIconY_ + 3),
+				lifeIconTexture_,
+				scale, scale, 0.0f,
+				0xCCFFFFFF // faded white (optionally sprite transparent)
+			);
 		}
 	}
 }

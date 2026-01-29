@@ -135,7 +135,7 @@ void GamePlay::Update(char* keys, char* preKeys) {
 	NextStageCheck();
 
 	//UI更新
-	ui_.Update(player_.GetTransform().worldPos);
+	ui_.Update(player_.GetTransform().worldPos,player_.GetHP());
 	
 }
 

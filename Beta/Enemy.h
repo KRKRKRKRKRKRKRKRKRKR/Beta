@@ -52,12 +52,17 @@ public:
 		return stageEnemyCount[stage];
 	}
 
+	int GetNumZeroedThisTick() const { return numEnemiesZeroedThisTick_; }
+	void ResetNumZeroedThisTick() { numEnemiesZeroedThisTick_ = 0; }
+
 private:
 	//敵データ配列
 	std::vector<EnemyData> enemies;
 
 	Easing rotateEasing;				//テクスチャ回転イージング
 	float targetRotation = 0.0f;		//目標回転角度
+
+	int numEnemiesZeroedThisTick_ = 0;
 
 	//敵テクスチャ
 	int countTexture40[6] = {

@@ -28,6 +28,7 @@ public:
 	void Init();										//初期化
 	void Update(char* keys, char* preKeys);				//更新	
 	void Draw();										//描画
+	int GetPlayerHP() const { return player_.GetHP(); }
 private:
 	Stage stage_;										//ステージ
 	Player player_;										//プレイヤー

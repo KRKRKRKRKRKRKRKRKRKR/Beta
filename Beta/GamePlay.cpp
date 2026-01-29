@@ -105,6 +105,15 @@ void GamePlay::Update(char* keys, char* preKeys) {
 	//敵更新
 	enemy_.Update(stage_.GetEnemySpawnRangeTransform(),currentCameraRotation_,player_.IsOnGround());
 
+	int damage = enemy_.GetNumZeroedThisTick();
+	if (damage > 0) {
+		int newHp = player_.GetHP() - damage;
+		if (newHp < 0) newHp = 0;
+		player_.SetHP(newHp);
+
+		// clear the damage count for next frame (not strictly required, Move() resets each tick)
+		enemy_.ResetNumZeroedThisTick();
+	}
 
 	timeScaleEasing_.Update();
 
@@ -150,6 +159,7 @@ void GamePlay::DebugText() {
 	ImGui::Text("Score = %d", Score::GetInstance()->GetDisplayScore());
 	ImGui::Text("Combo = % d",ComboManager::GetInstance()->GetComboCount());
 	ImGui::Text("StageState = %d", GameConfig::GetInstance()->GetStageState());
+	ImGui::Text("Player HP = %d", player_.GetHP());
 	ImGui::End();
 
 }

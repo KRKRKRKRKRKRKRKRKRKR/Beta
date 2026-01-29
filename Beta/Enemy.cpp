@@ -105,16 +105,19 @@ void Enemy::Move() {
 
 	bool waveChanged = config->IsWaveChanged();
 
+	numEnemiesZeroedThisTick_ = 0; // RESET at start of Move!
+
 	for (EnemyData& enemy : enemies) {
 		if (!enemy.isActive) {
 			continue;
 		}
 		
 		if (waveChanged) {
-				enemy.count--;
-				if (enemy.count < 0) {
-					enemy.isActive = false;
-				}
+			enemy.count--;
+			if (enemy.count < 0) {
+				enemy.isActive = false;
+				numEnemiesZeroedThisTick_++;
+			}
 		}
 
 		enemy.transform.worldPos.x += enemy.velocity.x * enemy.speed.x * ts;

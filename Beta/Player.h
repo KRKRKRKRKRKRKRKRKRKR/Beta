@@ -18,6 +18,10 @@ public:
 
 	bool IsOnGround() const { return onGround; }
 
+	// --- HP interface ---
+	int GetHP() const { return hp_; }
+	void SetHP(int v) { hp_ = v; }
+
 private:
 	//プレイヤーの向き
 	enum Direction {
@@ -47,6 +51,7 @@ private:
 	Easing rotateEasing;										//テクスチャ回転イージング
 	float targetRotation = 0.0f;								//目標回転角度
 	bool isHitEnemy = false;									//敵に当たったか
+	int hp_ = 5;
 
 	//プレイヤーテクスチャ
 	int playerTextureHandle[3] = {

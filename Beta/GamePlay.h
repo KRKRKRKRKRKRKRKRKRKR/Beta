@@ -66,4 +66,9 @@ private:
 
 	bool isPlayerWasHit_ = false;
 	bool wasPlayerHitInLastFrame_ = false;
+
+	int startDelayFrames_ = 0; // frames to wait before Play starts (e.g. 60 for 1s)
+	bool isStarting_ = true;   // true = waiting for start delay
+
+	bool isEnemySpawning_ = false;
 };

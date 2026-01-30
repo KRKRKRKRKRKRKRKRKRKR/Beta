@@ -13,6 +13,12 @@ TutorialScene::TutorialScene(SceneManager* manager)
     breathEasing_.Start();
     isBreathForward_ = true;
     Score::GetInstance()->ResetScore();
+
+
+
+
+
+    miniGamePlay.Init();
 }
 
 void TutorialScene::Update(char* keys, char* preKeys)
@@ -22,8 +28,21 @@ void TutorialScene::Update(char* keys, char* preKeys)
     bg_.Update();
 	tutorialBg_.Update();
 
+
+
+	miniGamePlay.Update(keys, preKeys);
+	miniGamePlay.SetCameraZoom({ 0.5f, 0.5f });
+
+
+
+
+
+
     if (!preKeys[DIK_RETURN] && keys[DIK_RETURN])
     {
+        sceneManager->ChangeScene(SceneType::Play);
+        GameConfig::GetInstance()->SetCurrentWave(0);
+        GameConfig::GetInstance()->SetCurrentStage(0);
         sceneManager->ChangeScene(SceneType::Play);
         SoundManager::Get().Stop("BGM");
     }
@@ -52,8 +71,13 @@ void TutorialScene::Update(char* keys, char* preKeys)
 
 void TutorialScene::Draw()
 {
+    Novice::DrawBox(100, 100, 200, 200, 0.0f, 0xFFFF0000, kFillModeSolid);
     bg_.Draw();
 	tutorialBg_.Draw();
+
+
+
+	miniGamePlay.DrawMainCamera();
 
     // Calculate breathing scale and color tint for the background
     //float breathScale = 1.0f + std::sin(bgBreathPhase_) * 0.012f;
@@ -91,4 +115,10 @@ void TutorialScene::Draw()
         0.0f,
         WHITE
     );
+
+
+
+
+
+  
 }

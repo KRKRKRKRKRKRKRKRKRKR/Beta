@@ -30,6 +30,13 @@ public:
 	void Update(char* keys, char* preKeys);				//更新	
 	void Draw();										//描画
 	int GetPlayerHP() const { return player_.GetHP(); }
+
+	void SetCameraZoom(const Vector2& zoom) {
+		CameraManager::GetInstance()->GetMainCamera().SetCameraZoom(zoom);
+	}
+	void DrawUI();										//UI描画
+	void DrawMainCamera();								//メインカメラ描画
+
 private:
 	Stage stage_;										//ステージ
 	Player player_;										//プレイヤー

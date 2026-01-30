@@ -162,6 +162,8 @@ void TitleScene2::Draw()
             Novice::DrawSprite(menuTextX_[i], menuTextY_[i], btnTex_[i][frame], 1.0f, 1.0f, 0.0f, WHITE);
         }
     }
+
+
 }
 
 void TitleScene2::Begin() {

@@ -199,8 +199,23 @@ void GamePlay::Draw() {
 	ui_.Draw(player_.GetTransform(),currentCameraRotation_, player_.GetHP());
 	//DebugText();
 
+
 }
 
+void GamePlay::DrawUI() {
+	bg_.Draw();
+	bg_.DrawLogo();
+	ui_.Draw(player_.GetTransform(), currentCameraRotation_, player_.GetHP());
+}
+
+void GamePlay::DrawMainCamera() {
+	stage_.Draw();
+	player_.Draw();
+	enemy_.Draw();
+	for (auto& effect : enemyEffects_) {
+		effect.Draw();
+	}
+}
 void GamePlay::DebugText() {
 	ImGui::Begin("GamePlay::DebugText ");
 	

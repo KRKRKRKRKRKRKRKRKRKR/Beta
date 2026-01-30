@@ -5,6 +5,11 @@
 #include "Score.h"
 #include "TutorialBackground.h"
 #include "SoundManager.h"
+#include "Stage.h"
+#include "Player.h"
+#include "Enemy.h"
+#include "GamePlay.h"
+
 
 class TutorialScene : public Scene
 {
@@ -36,4 +41,7 @@ private:
 	float bgBreathSpeed_ = 0.012f;
 	Easing breathEasing_;
 	bool isBreathForward_ = true;
+
+
+	GamePlay miniGamePlay;
 };

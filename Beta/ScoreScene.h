@@ -4,7 +4,7 @@
 #include "TitleBackground.h"
 #include "Score.h"
 #include "SoundManager.h"
-
+#include "ScoreSystem.h"
 class ScoreScene : public Scene
 {
 public:

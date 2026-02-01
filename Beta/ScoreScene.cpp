@@ -12,19 +12,19 @@ ScoreScene::ScoreScene(SceneManager* manager)
     breathEasing_.Init(1.0f, 1.012f, 120, EasingType::EASING_EASE_IN_OUT_SINE); // scale: 1.0 <-> 1.012, 120 frames per cycle
     breathEasing_.Start();
     isBreathForward_ = true;
-    Score::GetInstance()->ResetScore();
 	SoundManager::Get().Load("BGM", "./Sounds/bgm.mp3");
 	SoundManager::Get().Play("BGM", 1.0f, true);
 }
 
 void ScoreScene::Update(char* keys, char* preKeys)
 {
-    Score::GetInstance()->ResetScore();
 
     bg_.Update();
-
+	ScoreSystem::GetInstance()->InputName(keys, preKeys);
     if (!preKeys[DIK_RETURN] && keys[DIK_RETURN])
     {
+		ScoreSystem::GetInstance()->Add(Score::GetInstance()->GetDisplayScore());
+		ScoreSystem::GetInstance()->FocusOnLastAdded();
         sceneManager->ChangeScene(SceneType::Ranking);
     }
     frameCount_++;
@@ -54,32 +54,7 @@ void ScoreScene::Draw()
 {
 
     bg_.Draw();
-
-    // Calculate breathing scale and color tint for the background
-    //float breathScale = 1.0f + std::sin(bgBreathPhase_) * 0.012f;
-    //int brightness = 200 + static_cast<int>(std::sin(bgColorPhase_) * 28);
-    //unsigned int tint = 0xFF000000 | (brightness << 16) | (brightness << 8) | brightness;
-
-    // Draw animated background
-
-    /*Novice::DrawBox(0,0,
-        1280, 720,
-        0.0f,
-        BLACK,
-        kFillModeSolid
-    );*/
-
-    //float breathScale = breathEasing_.easingRate;
-
-    //Novice::DrawSprite(
-    //    posX_ - static_cast<int>(width_ * breathScale / 2),
-    //    posY_ - static_cast<int>(height_ * breathScale / 2),
-    //    bgTexture_,
-    //    breathScale, breathScale,
-    //    0.0f,
-    //    /*tint/color*/
-    //    WHITE
-    //);
+   ScoreSystem::GetInstance()->DrawScore(Score::GetInstance()->GetDisplayScore());
 
     // Enter key animation (remains as before)
     float scale = 1.0f;

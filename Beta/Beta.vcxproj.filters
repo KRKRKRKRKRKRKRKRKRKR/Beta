@@ -53,6 +53,12 @@
     <Filter Include="GamePlay\background">
       <UniqueIdentifier>{a2a7a003-31a1-4647-b964-6d43e39a17a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ScoreSystem">
+      <UniqueIdentifier>{532b5881-4b0b-4d91-ae53-b7a24b15b652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Json">
+      <UniqueIdentifier>{f7da1b7c-64a2-40fe-a0c6-78429e9c78db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -133,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="EnemyEffect.cpp">
       <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreSystem.cpp">
+      <Filter>ScoreSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,5 +299,11 @@
       <Filter>GamePlay\UI</Filter>
     </ClInclude>
     <ClInclude Include="EnemyEffect.h" />
+    <ClInclude Include="ScoreSystem.h">
+      <Filter>ScoreSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Json</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

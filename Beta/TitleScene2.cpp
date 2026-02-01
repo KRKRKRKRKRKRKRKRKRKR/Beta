@@ -1,7 +1,7 @@
 // TitleScene2.cpp
 #include "TitleScene2.h"
 #include <cmath>
-
+#include "ScoreSystem.h"
 TitleScene2::TitleScene2(SceneManager* manager)
     : sceneManager(manager), bg_(), logo_()
 {
@@ -104,7 +104,9 @@ void TitleScene2::Update(char* keys, char* preKeys)
                 sceneManager->ChangeScene(SceneType::Tutorial);
                 break;
             case 1: // Ranking
+				ScoreSystem::GetInstance()->FocusOnFirstPlace();
                 sceneManager->ChangeScene(SceneType::Ranking);
+                
                 break;
             case 2: // Credit
                 sceneManager->ChangeScene(SceneType::Credit);

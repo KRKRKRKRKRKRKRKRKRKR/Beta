@@ -2,7 +2,8 @@
 #include "Scene.h"
 #include "Easing.h"
 #include "TitleBackground.h"
-
+#include "ScoreSystem.h"
+#include "Score.h"
 class RankingScene : public Scene
 {
 public:
@@ -11,6 +12,7 @@ public:
 	void Draw() override;
 
 private:
+
 	SceneManager* sceneManager;
 	TitleBackground bg_;
 

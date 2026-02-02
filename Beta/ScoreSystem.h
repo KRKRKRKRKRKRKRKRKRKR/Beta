@@ -105,7 +105,7 @@ private:
 	void DrawNameSprite(Vector2 pos,  std::string& name, float spacing);
 
 
-	Vector2 inputScorePos = {481.0f,407.0f};
+	Vector2 inputScorePos = {483.0f,407.0f};
 	float inputScoreSpacing = 50.0f;
 	Vector2 inputNamePos = {665.0f,241.0f};
 	float inputNameSpacing = 57.0f;

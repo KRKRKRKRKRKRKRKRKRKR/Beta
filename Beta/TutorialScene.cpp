@@ -18,6 +18,13 @@ TutorialScene::TutorialScene(SceneManager* manager)
     wasdTexHandles[3][0] = Novice::LoadTexture("./Textures/UI/Dkey1.png"); // D up
     wasdTexHandles[3][1] = Novice::LoadTexture("./Textures/UI/Dkey2.png"); // D down
 
+    // Load combo PNGs for graph0.png to graph30.png
+    for (int i = 0; i <= 30; ++i) {
+        char filePath[128];
+        sprintf_s(filePath, "./Textures/graph/graph%d.png", i);
+        comboGraphHandles[i] = Novice::LoadTexture(filePath);
+    }
+
     breathEasing_.Init(1.0f, 1.012f, 120, EasingType::EASING_EASE_IN_OUT_SINE); // scale: 1.0 <-> 1.012, 120 frames per cycle
     breathEasing_.Start();
     isBreathForward_ = true;
@@ -143,4 +150,13 @@ void TutorialScene::Draw()
     Novice::DrawSprite(boxLeft + 92 + gap, boxTop, wasdTexHandles[1][keyA], 1.0f, 1.0f, 0.0f, WHITE); // A
     Novice::DrawSprite(boxLeft + 142 + gap, boxTop, wasdTexHandles[2][keyS], 1.0f, 1.0f, 0.0f, WHITE); // S
     Novice::DrawSprite(boxLeft + 192 + gap, boxTop, wasdTexHandles[3][keyD], 1.0f, 1.0f, 0.0f, WHITE); // D
+
+    // Clamp combo value
+    int combo = ComboManager::GetInstance()->GetComboCount();
+    if (combo < 0) combo = 0;
+    if (combo > 30) combo = 30;
+    // Estimated position from your screenshot
+    int comboBoxX = 105;
+    int comboBoxY = 270;
+    Novice::DrawSprite(comboBoxX, comboBoxY, comboGraphHandles[combo], 1.0f, 1.0f, 0.0f, WHITE);
 }

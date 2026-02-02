@@ -50,4 +50,9 @@ private:
 
 	// Key UI handles: [W, A, S, D][state 0:up, 1:down]
 	int wasdTexHandles[4][2]{};
+
+	// For combo graph PNGs (indexes 0–30)
+	int comboGraphHandles[31]{};
+	// Previous onGround status for wall-land detection
+	//bool preMiniPlayerOnGround_ = false;
 };

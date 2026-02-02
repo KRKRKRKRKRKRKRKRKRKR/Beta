@@ -42,7 +42,7 @@ private:
 
     // Enter key
     int enterTexture_;
-    int enterX_ = 1190, enterY_ = 620, enterW_ = 78, enterH_ = 86;
+    int enterX_ = 1170, enterY_ = 600, enterW_ = 78, enterH_ = 86;
     int frameCount_ = 0;
     float hoverOffset_ = 0.0f;
 

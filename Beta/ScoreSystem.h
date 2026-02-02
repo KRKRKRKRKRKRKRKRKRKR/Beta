@@ -105,19 +105,19 @@ private:
 	void DrawNameSprite(Vector2 pos,  std::string& name, float spacing);
 
 
-	Vector2 inputScorePos = {567.0f,280.0f};
+	Vector2 inputScorePos = {481.0f,407.0f};
 	float inputScoreSpacing = 50.0f;
-	Vector2 inputNamePos = {426.0f,378.0f};
-	float inputNameSpacing = 60.0f;
+	Vector2 inputNamePos = {665.0f,241.0f};
+	float inputNameSpacing = 57.0f;
 
 
-	Vector2 rankingBasePos = { 200.0f, 150.0f }; // ランキング全体の開始位置
-	float rowHeight = 60.0f;                    // 各行の間隔
+	Vector2 rankingBasePos = { 250.0f, 150.0f }; // ランキング全体の開始位置
+	float rowHeight = 90.0f;                    // 各行の間隔
 	float columnSpacing = 200.0f;               // 順位、名前、スコアの列の間隔
 
-	Vector2 rankBasePos = { 100.0f, 150.0f };
-	Vector2 nameBasePos = { 300.0f, 150.0f };
-	Vector2 scoreBasePos = { 600.0f, 150.0f };
+	Vector2 rankBasePos = { 250.0f, 150.0f };
+	Vector2 nameBasePos = { 370.0f, 150.0f };
+	Vector2 scoreBasePos = { 773.0f, 150.0f };
 
 	// --- 間隔の個別設定 ---
 	float rankSpacing = 40.0f;
@@ -129,7 +129,7 @@ private:
 	// 名前の最大入力文字数
 	int nameLengthLimit = 8;
 	//背景のテクスチャ
-	int BGtexture = Novice::LoadTexture("./texture/background.png");
+	int BGtexture = Novice::LoadTexture("./Textures/UI/BackGround/ranking4.png");
 
 	//大文字英語のテクスチャ
 	int upperAlphabetTexture[26] = {

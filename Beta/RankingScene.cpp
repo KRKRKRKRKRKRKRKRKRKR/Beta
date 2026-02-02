@@ -5,7 +5,7 @@
 RankingScene::RankingScene(SceneManager* manager)
 	: sceneManager(manager), bg_()
 {
-	bgTexture_ = Novice::LoadTexture("./Textures/UI/BackGround/ranking3.png");
+	bgTexture_ = Novice::LoadTexture("./Textures/UI/BackGround/ranking4.png");
 	enterTexture_ = Novice::LoadTexture("./Textures/UI/enter.png");
 
 	breathEasing_.Init(1.0f, 1.012f, 120, EasingType::EASING_EASE_IN_OUT_SINE); // scale: 1.0 <-> 1.012, 120 frames per cycle
@@ -61,31 +61,30 @@ void RankingScene::Draw()
 		kFillModeSolid
 	);*/
 
-	//float breathScale = breathEasing_.easingRate;
-
-	//Novice::DrawSprite(
-	//	posX_ - static_cast<int>(width_ * breathScale / 2),
-	//	posY_ - static_cast<int>(height_ * breathScale / 2),
-	//	bgTexture_,
-	//	breathScale, breathScale,
-	//	0.0f,
-	//	/*tint/color*/
-	//	WHITE
-	//);
+	float breathScale = breathEasing_.easingRate;
+	
+	Novice::DrawSprite(
+		posX_ - static_cast<int>(width_ * breathScale / 2),
+		posY_ - static_cast<int>(height_ * breathScale / 2),
+		bgTexture_,
+		breathScale, breathScale,
+		0.0f,
+		/*tint/color*/
+		WHITE
+	);
 	ScoreSystem::GetInstance()->DrawRanking();
 
-	// Draw the Enter PNG at the circled area with hover animation
-	//float scale = 1.0f; // Try 0.8 to make it slightly smaller (adjust if you want)
+	float scale = 1.0f; // Try 0.8 to make it slightly smaller (adjust if you want)
 	//int dW = static_cast<int>(enterW_ * scale);
 	//int dH = static_cast<int>(enterH_ * scale);
 
-	//Novice::DrawSprite(
-	//	enterX_, // X position
-	//	enterY_ + static_cast<int>(hoverOffset_), // Y position with hover animation
-	//	enterTexture_,
-	//	scale, scale,
-	//	0.0f,
-	//	WHITE);
+	Novice::DrawSprite(
+		enterX_, // X position
+		enterY_ + static_cast<int>(hoverOffset_), // Y position with hover animation
+		enterTexture_,
+		scale, scale,
+		0.0f,
+		WHITE);
 
-
+	
 }

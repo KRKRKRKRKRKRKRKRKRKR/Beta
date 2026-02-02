@@ -76,7 +76,7 @@ void ScoreSystem::DrawScore(int score) {
 	camera.MoveCameraTransform();
 
 	// 背景描画
-	Novice::DrawSprite(0, 0, BGtexture, 1.0f, 1.0f, 0.0f, WHITE);
+	//Novice::DrawSprite(0, 0, BGtexture, 1.0f, 1.0f, 0.0f, WHITE);
 
 	ImGui::Begin("Score Layout");
 	ImGui::DragFloat2("ScorePos", &inputScorePos.x, 1.0f);
@@ -124,7 +124,7 @@ void ScoreSystem::DrawRanking() {
 		Vector2 sPos = { scoreBasePos.x, rankBasePos.y + yOffset };
 		DrawScoreSprite(sPos, currentScores[i].score, scoreSpacing);
 	}
-	Novice::DrawSprite(0, 0, BGtexture, 1.0f, 1.0f, 0.0f, WHITE);
+	//Novice::DrawSprite(0, 0, BGtexture, 1.0f, 1.0f, 0.0f, WHITE);
 }//private-------------------------------------------------------------
 
 std::vector<RankingData> ScoreSystem::Load() {

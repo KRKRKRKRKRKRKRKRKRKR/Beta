@@ -45,6 +45,8 @@ void GamePlay::Init() {
 	cameraRotateEasing_.easingRate = 0.0f;
 
 	SoundManager::Get().Load("Damage", "./Sounds/damage.mp3");
+	//////////////////////////////////////////////////
+	SoundManager::Get().Load("hit", "./Sounds/A.mp3");
 }
 
 
@@ -79,6 +81,8 @@ void GamePlay::Update(char* keys, char* preKeys) {
 		cameraShakeDuration_ = 10.0f;
 		cameraShakePower_ = 6.0f;
 		cameraShakeTime_ = 0.0f;
+
+		SoundManager::Get().Play("hit", 3.0f, false);
 
 		// Trigger slow motion!
 		timeScaleEasing_.Init(slowMotionTimeScale, normalTimeScale, slowMotionTime, EasingType::EASING_EASE_OUT_CUBIC);

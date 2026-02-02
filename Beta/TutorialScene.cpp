@@ -141,8 +141,8 @@ void TutorialScene::Draw()
     int keyD = (keys_[DIK_D]) ? 1 : 0;
 
     // Position (adjust as needed)
-    int boxLeft = 860;
-    int boxTop = 292;
+    int boxLeft = 858;
+    int boxTop = 425;
     int gap = 0; // No gap; change if you want space between keys
 
     // Draw 4 keys horizontally, centered in the box
@@ -152,11 +152,11 @@ void TutorialScene::Draw()
     Novice::DrawSprite(boxLeft + 192 + gap, boxTop, wasdTexHandles[3][keyD], 1.0f, 1.0f, 0.0f, WHITE); // D
 
     // Clamp combo value
-    int combo = ComboManager::GetInstance()->GetComboCount();
-    if (combo < 0) combo = 0;
-    if (combo > 30) combo = 30;
-    // Estimated position from your screenshot
-    int comboBoxX = 105;
-    int comboBoxY = 270;
-    Novice::DrawSprite(comboBoxX, comboBoxY, comboGraphHandles[combo], 1.0f, 1.0f, 0.0f, WHITE);
+    //int combo = ComboManager::GetInstance()->GetComboCount();
+    //if (combo < 0) combo = 0;
+    //if (combo > 30) combo = 30;
+    //// Estimated position from your screenshot
+    //int comboBoxX = 105;
+    //int comboBoxY = 270;
+    //Novice::DrawSprite(comboBoxX, comboBoxY, comboGraphHandles[combo], 1.0f, 1.0f, 0.0f, WHITE);
 }

@@ -4,14 +4,14 @@
 
 TutorialBackground::TutorialBackground()
 {
-    textureHandles_[0] = Novice::LoadTexture("./Textures/UI/Background/ttestplay1.png");
-    textureHandles_[1] = Novice::LoadTexture("./Textures/UI/Background/ttestplay2.png");
-    textureHandles_[2] = Novice::LoadTexture("./Textures/UI/Background/ttestplay3.png");
-    textureHandles_[3] = Novice::LoadTexture("./Textures/UI/Background/ttestplay4.png");
-    textureHandles_[4] = Novice::LoadTexture("./Textures/UI/Background/ttestplay5.png");
-    textureHandles_[5] = Novice::LoadTexture("./Textures/UI/Background/ttestplay6.png");
-    textureHandles_[6] = Novice::LoadTexture("./Textures/UI/Background/ttestplay7.png");
-    textureHandles_[7] = Novice::LoadTexture("./Textures/UI/Background/ttestplay8.png");
+    textureHandles_[0] = Novice::LoadTexture("./Textures/UI/Background/tttestplay1.png");
+    textureHandles_[1] = Novice::LoadTexture("./Textures/UI/Background/tttestplay2.png");
+    textureHandles_[2] = Novice::LoadTexture("./Textures/UI/Background/tttestplay3.png");
+    textureHandles_[3] = Novice::LoadTexture("./Textures/UI/Background/tttestplay4.png");
+    textureHandles_[4] = Novice::LoadTexture("./Textures/UI/Background/tttestplay5.png");
+    textureHandles_[5] = Novice::LoadTexture("./Textures/UI/Background/tttestplay6.png");
+    textureHandles_[6] = Novice::LoadTexture("./Textures/UI/Background/tttestplay7.png");
+    textureHandles_[7] = Novice::LoadTexture("./Textures/UI/Background/tttestplay8.png");
     // If you want a logo overlay for tutorial scene:
     //logoTexture_ = Novice::LoadTexture("./Textures/UI/tutorialbg/tutoriallogo.png");
 }

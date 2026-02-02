@@ -4,7 +4,7 @@ PlayScene::PlayScene(SceneManager* manager)
 	: sceneManager(manager), gamePlay_()
 {
 	SoundManager::Get().Load("PlayBgm", "./Sounds/gamePlay.mp3");
-	SoundManager::Get().Play("PlayBgm", 1.0f, true);
+	SoundManager::Get().Play("PlayBgm", 0.7f, true);
 }
 
 void PlayScene::Update(char* keys, char* preKeys)

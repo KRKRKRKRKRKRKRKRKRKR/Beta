@@ -1,7 +1,7 @@
 #include <Novice.h>
 #include "Scene.h" 
 
-const char kWindowTitle[] = "コジマ";
+const char kWindowTitle[] = "1345_GraviTwist";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {

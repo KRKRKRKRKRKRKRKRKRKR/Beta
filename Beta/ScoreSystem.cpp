@@ -1,5 +1,5 @@
 ﻿#include "ScoreSystem.h"
-#include <imgui.h>
+//#include <imgui.h>
 //public-------------------------------------------------------------
 
 ScoreSystem::ScoreSystem() : fileName("ranking.json") {

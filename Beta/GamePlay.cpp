@@ -1,7 +1,7 @@
 ﻿#define _USE_MATH_DEFINES
 #include <cmath>
 #include "GamePlay.h"
-#include <imgui.h>
+//#include <imgui.h>
 
 GamePlay::GamePlay() {
 	Init();
@@ -221,15 +221,15 @@ void GamePlay::DrawMainCamera() {
 	}
 }
 void GamePlay::DebugText() {
-	ImGui::Begin("GamePlay::DebugText ");
-	
-	ImGui::Text("stage = %d", GameConfig::GetInstance()->GetCurrentStage());
-	ImGui::Text("Wave = % d", GameConfig::GetInstance()->GetCurrentWave());
-	ImGui::Text("Score = %d", Score::GetInstance()->GetDisplayScore());
-	ImGui::Text("Combo = % d",ComboManager::GetInstance()->GetComboCount());
-	ImGui::Text("StageState = %d", GameConfig::GetInstance()->GetStageState());
-	ImGui::Text("Player HP = %d", player_.GetHP());
-	ImGui::End();
+	//ImGui::Begin("GamePlay::DebugText ");
+	//
+	//ImGui::Text("stage = %d", GameConfig::GetInstance()->GetCurrentStage());
+	//ImGui::Text("Wave = % d", GameConfig::GetInstance()->GetCurrentWave());
+	//ImGui::Text("Score = %d", Score::GetInstance()->GetDisplayScore());
+	//ImGui::Text("Combo = % d",ComboManager::GetInstance()->GetComboCount());
+	//ImGui::Text("StageState = %d", GameConfig::GetInstance()->GetStageState());
+	//ImGui::Text("Player HP = %d", player_.GetHP());
+	//ImGui::End();
 
 }
 
